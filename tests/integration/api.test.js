@@ -25,11 +25,11 @@ const {
   makeExplainResponse,
 } = require('../utils/testHelpers');
 
-// ─── Suite State ──────────────────────────────────────────────────────────────
+// ─── Suite State ─────────────────────────────────────────────────────────[...]
 
 let server;
 
-// ─── Fixture Data ─────────────────────────────────────────────────────────────
+// ─── Fixture Data ──────────────────────────────────────────────────────────[...]
 
 const MOCK_MYTH_RESP = makeMythResponse();
 
@@ -67,11 +67,11 @@ after(async () => {
   if (server) await stopServer(server);
 });
 
-// ─── Test Suite ───────────────────────────────────────────────────────────────
+// ─── Test Suite ───────────────────────────────────────────────────────────[...]
 
 describe('API Endpoints — Integration Tests', () => {
 
-  // ── Health ────────────────────────────────────────────────────────────────
+  // ── Health ───────────────────────────────────────────────────────────[...]
 
   it('GET /health — should return healthy status with services map', async () => {
     const { status, body } = await request('GET', '/health');
@@ -284,7 +284,29 @@ describe('API Endpoints — Integration Tests', () => {
     }
   });
 
-  // ── Rate Limiting ─────────────────────────────────────────────────────────
+  // ── 404 handling ──────────────────────────────────────────────────────────[...]
+
+  it('Unknown routes — should return 404 JSON', async () => {
+    const { status, body } = await request('GET', '/api/v1/nonexistent-endpoint');
+
+    assert.strictEqual(status, 404, `Expected 404, got ${status}`);
+    assert.ok(body.error, 'Should return JSON error body');
+  });
+
+  // ── OPTIONS preflight ─────────────────────────────────────────────────────
+
+  it('OPTIONS /api/v1/myth-check — CORS preflight returns 204', async () => {
+    const { status } = await request('OPTIONS', '/api/v1/myth-check', null, {
+      Origin:                          'https://example.com',
+      'Access-Control-Request-Method': 'POST',
+    });
+
+    assert.strictEqual(status, 204, `Expected 204 for OPTIONS preflight, got ${status}`);
+  });
+
+  // ── Rate Limiting ──────────────────────────────────────────────────────────[...]
+  // NOTE: This test is run LAST because it floods the rate limiter.
+  // Running it first would cause subsequent tests to fail with 429 instead of expected status codes.
 
   it('Rate limiting — should return 429 after threshold is exceeded', async () => {
     // Send 105 concurrent requests to trigger rate limiter (threshold: 100/15min)
@@ -309,25 +331,5 @@ describe('API Endpoints — Integration Tests', () => {
     } else {
       assert.ok(rateLimited.length > 0, 'Should rate limit after threshold');
     }
-  });
-
-  // ── 404 handling ─────────────────────────────────────────────────────────
-
-  it('Unknown routes — should return 404 JSON', async () => {
-    const { status, body } = await request('GET', '/api/v1/nonexistent-endpoint');
-
-    assert.strictEqual(status, 404, `Expected 404, got ${status}`);
-    assert.ok(body.error, 'Should return JSON error body');
-  });
-
-  // ── OPTIONS preflight ─────────────────────────────────────────────────────
-
-  it('OPTIONS /api/v1/myth-check — CORS preflight returns 204', async () => {
-    const { status } = await request('OPTIONS', '/api/v1/myth-check', null, {
-      Origin:                          'https://example.com',
-      'Access-Control-Request-Method': 'POST',
-    });
-
-    assert.strictEqual(status, 204, `Expected 204 for OPTIONS preflight, got ${status}`);
   });
 });
