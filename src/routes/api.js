@@ -77,7 +77,7 @@ router.post('/v1/myth-check', aiLimiter, async (req, res) => {
   }
 
   try {
-    const result = await MythAgent.checkMyth(text.trim());
+    const result = await MythAgent.checkMyth(text.trim(), lang);
     return res.json(result);
   } catch (err) {
     console.error('[myth-check] Error:', err.message);

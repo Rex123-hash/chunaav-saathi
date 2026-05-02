@@ -133,6 +133,7 @@ jobs:
       FIRESTORE_EMULATOR_HOST: "localhost:8080"
       GCLOUD_PROJECT:          "chunav-saathi-test"
       NODE_ENV:                "test"
+      CORS_ORIGIN:             "https://example.com"
     steps:
       - name: Checkout
         uses: actions/checkout@v4

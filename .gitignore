@@ -48,7 +48,6 @@ coverage/
 # ── Google Cloud / Firebase ───────────────────────────────────────────────────
 .gcloud/
 .firebaserc
-firebase.json
 firestore-debug.log
 ui-debug.log
 .firebase/

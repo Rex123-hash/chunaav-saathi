@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "myths",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category",   "order": "ASCENDING"  },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

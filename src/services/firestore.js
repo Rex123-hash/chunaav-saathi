@@ -28,7 +28,7 @@ const { Firestore } = require('@google-cloud/firestore');
  * @typedef {Object} TruthTableEntry
  * @property {string} myth_id
  * @property {{verdict:string, confidence:number, ai_model_used:string}} fact_check_result
- * @property {"gemini-1.5-flash"|"manual_review"} verified_by
+ * @property {"gemini-2.0-flash-lite"|"manual_review"} verified_by
  * @property {FirebaseFirestore.Timestamp} last_updated
  */
 
@@ -65,6 +65,12 @@ class TTLCache {
 
   delete(key) { this._store.delete(key); }
   clear()     { this._store.clear(); }
+
+  clearByPrefix(prefix) {
+    for (const key of this._store.keys()) {
+      if (key.startsWith(prefix)) this._store.delete(key);
+    }
+  }
 }
 
 // ─── Collections ─────────────────────────────────────────────────────────────
@@ -181,7 +187,7 @@ class FirestoreService {
       sources: sources ?? [],
       created_at: Firestore.Timestamp.now(),
     });
-    this._cache.delete(`myths:all:50`); // invalidate list cache
+    this._cache.clearByPrefix('myths:'); // invalidate all myth list caches
     return ref.id;
   }
 

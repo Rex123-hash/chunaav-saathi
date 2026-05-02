@@ -1,6 +1,7 @@
 'use strict';
 
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
+const crypto = require('node:crypto');
 const path = require('path');
 const fs   = require('fs');
 const firestoreService = require('../services/firestore');
@@ -153,7 +154,7 @@ class MythAgent {
   async _tool_searchTruthTable(mythText) {
     try {
       // Naive text-to-ID hash for lookup (real impl: use embedding similarity)
-      const mythId = Buffer.from(mythText.trim().toLowerCase()).toString('base64').slice(0, 20);
+      const mythId = crypto.createHash('sha256').update(mythText.trim().toLowerCase()).digest('hex').slice(0, 32);
       const entry  = await firestoreService.getTruthTableEntry(mythId);
       if (entry) return { found: true, ...entry };
       return { found: false, message: 'No cached fact-check found' };
@@ -274,11 +275,12 @@ class MythAgent {
   // ── Core: Check Myth ────────────────────────────────────────────────────────
 
   /**
-   * Fact-checks an election myth using Gemini 1.5 Flash + MCP tools
+   * Fact-checks an election myth using Gemini 2.0 Flash Lite + MCP tools
    * @param {string} mythText - User-submitted myth in any language
+   * @param {'hi'|'en'|'hinglish'} [lang='hinglish'] - Preferred response language
    * @returns {Promise<MythAgentResponse>}
    */
-  async checkMyth(mythText) {
+  async checkMyth(mythText, lang = 'hinglish') {
     if (!mythText?.trim()) throw new Error('[MythAgent] mythText is required');
 
     // 1. Check Firestore cache first (skip Gemini if hit)
@@ -290,9 +292,16 @@ class MythAgent {
 
     this._ensureClient();
 
+    const langGuide = {
+      hi:      'Respond in Hindi (Devanagari). Use English election terms only when unavoidable.',
+      en:      'Respond in English.',
+      hinglish:'Respond in natural Hinglish — mix Hindi and English as educated urban Indians speak.',
+    }[lang] ?? 'Respond in natural Hinglish.';
+
     const prompt = [
       `Fact-check this election claim: "${mythText}"`,
       '',
+      `Language: ${langGuide}`,
       'Use the available tools to search the truth table and local facts database.',
       'Then respond with a JSON object matching this exact schema:',
       '{',
@@ -330,7 +339,7 @@ class MythAgent {
         if (!parsed) throw new Error(`[MythAgent] Invalid JSON from model: ${text.slice(0, 100)}`);
 
         // Persist result to Firestore truth table (fire & forget)
-        const mythId = Buffer.from(mythText.trim().toLowerCase()).toString('base64').slice(0, 20);
+        const mythId = crypto.createHash('sha256').update(mythText.trim().toLowerCase()).digest('hex').slice(0, 32);
         firestoreService.updateTruthTable(mythId, {
           fact_check_result: parsed,
           verified_by:       'gemini-2.0-flash-lite',

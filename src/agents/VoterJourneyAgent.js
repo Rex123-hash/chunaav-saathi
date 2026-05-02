@@ -194,11 +194,11 @@ class VoterJourneyAgent {
       completed_modules: completed,
       progress,
       stage: nextStage,
-      ...(progress === 100 ? { 'timestamps.completed_at': 'SERVER_TIMESTAMP' } : {}),
+      ...(progress === 100 ? { 'timestamps.completed_at': new Date() } : {}),
     };
 
-    // Invalidate next-module cache
-    geminiClient.cache.delete(`journey:next:${userId}:${moduleId}`);
+    // Invalidate all next-module suggestions for this user — any could be stale
+    geminiClient.cache.clearByPrefix(`journey:next:${userId}:`);
 
     const updated = await firestoreService.updateVoterJourney(userId, updates);
     console.log(`[VoterJourneyAgent] ${userId} completed "${moduleId}" — progress: ${progress}%`);

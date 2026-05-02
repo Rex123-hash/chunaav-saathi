@@ -1,8 +1,7 @@
 'use strict';
 
-const helmet      = require('helmet');
-const rateLimit   = require('express-rate-limit');
-const compression = require('compression');
+const helmet    = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 // ─── Helmet (HTTP Security Headers) ──────────────────────────────────────────
 
@@ -51,12 +50,11 @@ const helmetMiddleware = helmet({
  * Prevents DDoS and API key exhaustion.
  */
 const globalLimiter = rateLimit({
-  windowMs:         15 * 60 * 1000,   // 15 minutes
-  max:              100,
-  standardHeaders:  true,
-  legacyHeaders:    false,
-  message:          { error: 'Too many requests from this IP. Please try again in 15 minutes.' },
-  skip:             (req) => req.path === '/health',   // Health checks never throttled
+  windowMs:        15 * 60 * 1000,   // 15 minutes
+  max:             100,
+  standardHeaders: true,
+  legacyHeaders:   false,
+  message:         { error: 'Too many requests from this IP. Please try again in 15 minutes.' },
 });
 
 /**
@@ -160,5 +158,4 @@ module.exports = {
   requestSizeGuard,
   sanitizeInput,
   extraSecurityHeaders,
-  compression,
 };

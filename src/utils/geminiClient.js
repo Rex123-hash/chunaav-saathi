@@ -38,6 +38,12 @@ class TTLCache {
     this._store.set(key, { value, expires: Date.now() + CACHE_TTL_MS });
   }
   delete(key) { this._store.delete(key); }
+
+  clearByPrefix(prefix) {
+    for (const key of this._store.keys()) {
+      if (key.startsWith(prefix)) this._store.delete(key);
+    }
+  }
 }
 
 // ─── GeminiClient ─────────────────────────────────────────────────────────────
