@@ -1,0 +1,51 @@
+################################################################################
+# App Engine Flexible — Chunav Saathi (fallback to Cloud Run preferred)
+# Deploy: gcloud app deploy app.yaml
+################################################################################
+
+runtime: nodejs20
+env: flex
+
+# Keep costs low — scale to zero not supported on flex, use standard for that
+manual_scaling:
+  instances: 1
+
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+
+network:
+  forwarded_ports:
+    - 8080/tcp
+
+env_variables:
+  NODE_ENV: production
+  PORT: "8080"
+
+# Health checks (App Engine standard paths)
+readiness_check:
+  path: /health
+  check_interval_sec: 10
+  timeout_sec: 5
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 60
+
+liveness_check:
+  path: /health
+  check_interval_sec: 30
+  timeout_sec: 5
+  failure_threshold: 3
+  success_threshold: 1
+  initial_delay_sec: 120
+
+# Skip uploading large / unnecessary files
+skip_files:
+  - ^node_modules/.*
+  - ^tests/.*
+  - ^\.git/.*
+  - ^\.env.*
+  - ^.*\.log$
+  - ^dist/.*
+  - ^coverage/.*

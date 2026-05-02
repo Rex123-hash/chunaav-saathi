@@ -1,0 +1,45 @@
+{
+  "name": "chunav-saathi",
+  "version": "1.0.0",
+  "description": "Chunav Saathi — India's AI-powered civic education and election intelligence platform.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start":            "node src/index.js",
+    "dev":              "node --watch src/index.js",
+    "test":             "node --test tests/**/*.test.js",
+    "test:unit":        "node --test tests/agents/*.test.js",
+    "test:integration": "node --test tests/integration/*.test.js",
+    "test:ci":          "node --test --reporter=spec tests/**/*.test.js",
+    "lint":             "node --check src/**/*.js",
+    "emulator":         "firebase emulators:start --only firestore",
+    "check-size":       "node scripts/check-size.js",
+    "check-key":        "node check-key.js",
+    "security:audit":   "npm audit --audit-level=high"
+  },
+  "keywords": [
+    "india", "elections", "civic-tech", "ai", "gemini", "firebase",
+    "voter-education", "election-commission", "hackathon"
+  ],
+  "repository": {
+    "type": "git",
+    "url":  "https://github.com/yourusername/chunav-saathi"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@google-cloud/firestore":    "^7.0.0",
+    "@google-cloud/secret-manager": "^5.0.0",
+    "@google/generative-ai":      "^0.24.0",
+    "compression":                "^1.8.1",
+    "cors":                       "^2.8.6",
+    "dotenv":                     "^17.4.2",
+    "express":                    "^4.18.0",
+    "express-rate-limit":         "^8.4.1",
+    "express-validator":          "^7.3.2",
+    "helmet":                     "^8.1.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

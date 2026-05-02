@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-01-01",
+  "facts": [
+    {
+      "id": "evm_001",
+      "category": "evm_security",
+      "keywords": ["evm", "hack", "tamper", "manipulate", "rigged"],
+      "fact_en": "EVMs in India are standalone devices with no Wi-Fi, Bluetooth, or internet connectivity. They cannot be remotely hacked.",
+      "fact_hi": "भारत की EVM मशीनें standalone होती हैं - कोई Wi-Fi, Bluetooth या internet नहीं होता। इन्हें remotely hack नहीं किया जा सकता।",
+      "credibility": 98,
+      "sources": [
+        { "title": "Election Commission of India - EVM FAQ", "url": "https://ecisveep.nic.in/evm", "credibility": 99 },
+        { "title": "Supreme Court judgment on EVM", "url": "https://main.sci.gov.in", "credibility": 99 }
+      ]
+    },
+    {
+      "id": "vote_001",
+      "category": "voting_process",
+      "keywords": ["bogus", "fake", "duplicate", "vote twice", "multiple votes"],
+      "fact_en": "Each voter can vote only once. The indelible ink mark and EPIC card verification prevent duplicate voting.",
+      "fact_hi": "हर voter सिर्फ एक बार vote कर सकता है। indelible ink और EPIC card verification से duplicate voting नहीं हो सकती।",
+      "credibility": 97,
+      "sources": [
+        { "title": "Representation of the People Act, 1951", "url": "https://legislative.gov.in", "credibility": 99 }
+      ]
+    },
+    {
+      "id": "vote_002",
+      "category": "voting_process",
+      "keywords": ["nota", "none of the above", "reject", "no candidate"],
+      "fact_en": "NOTA (None Of The Above) is a valid voting option introduced by the Supreme Court in 2013.",
+      "fact_hi": "NOTA (None Of The Above) एक valid voting option है, जिसे Supreme Court ने 2013 में introduce किया था।",
+      "credibility": 99,
+      "sources": [
+        { "title": "Supreme Court NOTA Judgment 2013", "url": "https://main.sci.gov.in", "credibility": 99 }
+      ]
+    },
+    {
+      "id": "candidate_001",
+      "category": "candidate_info",
+      "keywords": ["criminal", "case", "charge", "affidavit", "background"],
+      "fact_en": "Candidates must declare criminal cases in their affidavit filed with the Election Commission. This is public information.",
+      "fact_hi": "Candidates को Election Commission में file किए गए affidavit में criminal cases declare करने होते हैं। यह public information है।",
+      "credibility": 98,
+      "sources": [
+        { "title": "ECI Affidavit Portal", "url": "https://affidavit.eci.gov.in", "credibility": 99 },
+        { "title": "ADR India", "url": "https://adrindia.org", "credibility": 92 }
+      ]
+    },
+    {
+      "id": "vote_003",
+      "category": "voting_process",
+      "keywords": ["vvpat", "paper", "trail", "verify", "slip"],
+      "fact_en": "VVPAT machines print a paper slip showing your vote after you press the EVM button. This slip is visible for 7 seconds.",
+      "fact_hi": "VVPAT machine EVM button press करने के बाद एक paper slip print करती है। यह slip 7 seconds तक visible रहती है।",
+      "credibility": 99,
+      "sources": [
+        { "title": "Election Commission VVPAT Guide", "url": "https://ecisveep.nic.in/vvpat", "credibility": 99 }
+      ]
+    }
+  ],
+  "trusted_domains": [
+    { "domain": "ecisveep.nic.in", "credibility": 99, "name": "Election Commission of India" },
+    { "domain": "eci.gov.in", "credibility": 99, "name": "Election Commission of India" },
+    { "domain": "main.sci.gov.in", "credibility": 99, "name": "Supreme Court of India" },
+    { "domain": "legislative.gov.in", "credibility": 99, "name": "India Code - Ministry of Law" },
+    { "domain": "pib.gov.in", "credibility": 95, "name": "Press Information Bureau" },
+    { "domain": "adrindia.org", "credibility": 92, "name": "Association for Democratic Reforms" },
+    { "domain": "factchecker.in", "credibility": 90, "name": "FactChecker.in" },
+    { "domain": "boomlive.in", "credibility": 88, "name": "BOOM Live" },
+    { "domain": "altnews.in", "credibility": 88, "name": "AltNews" }
+  ]
+}

@@ -1,0 +1,2404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chunav Saathi - AI-powered civic education for informed voting in India">
+  <meta name="keywords" content="India, elections, voting, civic education, EVM, voter registration">
+  <title>Chunav Saathi | Your Trusted Election Companion</title>
+  
+  <!-- Security: Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com https://*.firebaseio.com https://*.googleapis.com; img-src 'self' data: https:;">
+  
+  <!-- Google Services Integration: Google Analytics (Mock ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  
+  <!-- Google Services Integration: Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    // Setup for Chunav Saathi Firebase project
+    const firebaseConfig = {
+      apiKey: "AIzaSy_mock_key_for_demonstration",
+      authDomain: "chunav-saathi.firebaseapp.com",
+      projectId: "chunav-saathi",
+      storageBucket: "chunav-saathi.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef123456",
+      measurementId: "G-XXXXXXXXXX"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    // const auth = getAuth(app);
+    // const db = getFirestore(app);
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ==========================================
+       GLASSMORPHISM DESIGN SYSTEM & ANIMATIONS
+       ========================================== */
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: #0d0221;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(255,153,51,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%,  rgba(19,136,8,0.15)   0%, transparent 60%),
+        radial-gradient(ellipse 70% 60% at 60% 40%,  rgba(0,128,255,0.20)  0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 80%,  rgba(138,43,226,0.22) 0%, transparent 60%);
+      overflow-x: hidden;
+    }
+
+    /* Animated Orbs */
+    .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.35; animation: drift 18s ease-in-out infinite; pointer-events: none; z-index: 0; }
+    .orb-1 { width: 420px; height: 420px; background: rgba(255,153,51,0.5);  top: -100px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 380px; height: 380px; background: rgba(19,136,8,0.5);    bottom: -80px; right: -80px; animation-delay: -6s; }
+    .orb-3 { width: 300px; height: 300px; background: rgba(91,33,182,0.6);   top: 40%; left: 50%; transform: translate(-50%,-50%); animation-delay: -12s; }
+    
+    @keyframes drift {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(30px,-25px) scale(1.05); }
+      66%      { transform: translate(-20px,20px) scale(0.95); }
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: transform 0.3s var(--transition-smooth), box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.13);
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn-glow { transition: box-shadow 0.3s ease, background 0.3s ease; }
+    .btn-glow:hover { box-shadow: 0 0 24px rgba(255,255,255,0.45); }
+
+    .progress-low { background: linear-gradient(90deg, #ef4444, #f97316); }
+    .progress-med { background: linear-gradient(90deg, #f59e0b, #eab308); }
+    .progress-high { background: linear-gradient(90deg, #22c55e, #16a34a); }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
+    
+    select option { background:#1e1b4b; color:#fff; }
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+    .pulse-dot { animation: pulse-dot 2s ease infinite; }
+
+    /* Sticky Nav */
+    .sticky-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(13,2,33,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #fff; }
+    .nav-link.active { color: #fb923c; }
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* Section divider */
+    .section-header { background: linear-gradient(135deg, rgba(255,153,51,0.15), rgba(19,136,8,0.15)); border-left: 3px solid #fb923c; }
+    /* LIVE badge */
+    @keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(239,68,68,0.7)} 50%{opacity:.8;box-shadow:0 0 0 6px rgba(239,68,68,0)} }
+    .live-badge { animation: livePulse 2s ease infinite; }
+    /* Counter */
+    @keyframes countUp { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+    .count-anim { animation: countUp 0.5s ease-out forwards; }
+    /* FAB */
+    .fab { position: fixed; bottom: 24px; right: 24px; z-index: 90; }
+    .fab-menu { display: none; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .fab-menu.open { display: flex; }
+    /* Mobile nav */
+    .mobile-nav { display: none; }
+    .mobile-nav.open { display: flex; }
+    /* Hamburger */
+    .ham-line { display:block; width:22px; height:2px; background:white; border-radius:2px; transition: all 0.3s; }
+    /* Charts */
+    .chart-container { position: relative; height: 200px; }
+    /* Constituency bar */
+    .con-bar { height: 6px; border-radius: 3px; transition: width 1s ease; }
+    /* FAQ accordion */
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+    .faq-answer.open { max-height: 400px; }
+    /* EVM */
+    .evm-btn { transition: all 0.15s; cursor: pointer; }
+    .evm-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+    .evm-btn:active { transform: scale(0.95); }
+    /* Shimmer skeleton */
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+    .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+    /* Toast */
+    #toast { position:fixed; top:80px; right:16px; z-index:200; transform:translateX(110%); transition:transform 0.4s ease; }
+    #toast.show { transform:translateX(0); }
+    /* Nav active state */
+    .nav-link { transition: color 0.2s ease; position: relative; }
+    .nav-link:hover { color: #fb923c; }
+    .nav-link.active { color: #fb923c; }
+    .nav-link.active::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px; background:#fb923c; border-radius:1px; }
+  </style>
+</head>
+
+<body class="font-sans antialiased text-white relative">
+  <!-- Toast Notification -->
+  <div id="toast" class="glass-card rounded-xl px-5 py-3 text-sm font-medium flex items-center gap-3"></div>
+
+  <!-- Sticky Navigation -->
+  <nav class="sticky-nav" aria-label="Main navigation">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+      <a href="/" class="flex items-center gap-2 font-bold text-base">
+        <span class="text-xl">🗳️</span>
+        <span class="bg-gradient-to-r from-orange-300 to-green-300 bg-clip-text text-transparent">Chunav Saathi</span>
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+        <a href="#s-dashboard" class="nav-link">Dashboard</a>
+        <a href="#s-tracker" class="nav-link">Poll Tracker</a>
+        <a href="#s-heatmap" class="nav-link">Heatmap</a>
+        <a href="#s-history" class="nav-link">History</a>
+        <a href="#s-news" class="nav-link">News</a>
+        <a href="#s-evm" class="nav-link">EVM Sim</a>
+        <a href="#s-faq" class="nav-link">FAQs</a>
+      </div>
+      <button id="hamBtn" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+        <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
+      </button>
+    </div>
+    <div id="mobileNav" class="mobile-nav md:hidden flex-col px-4 pb-4 gap-3 text-sm text-white/70">
+      <a href="#s-dashboard" class="nav-link py-2 border-b border-white/10">📊 Dashboard</a>
+      <a href="#s-tracker" class="nav-link py-2 border-b border-white/10">🗺️ Poll Tracker</a>
+      <a href="#s-heatmap" class="nav-link py-2 border-b border-white/10">🔥 Heatmap</a>
+      <a href="#s-history" class="nav-link py-2 border-b border-white/10">⏰ History</a>
+      <a href="#s-news" class="nav-link py-2 border-b border-white/10">📰 News</a>
+      <a href="#s-evm" class="nav-link py-2 border-b border-white/10">🎮 EVM Simulator</a>
+      <a href="#s-faq" class="nav-link py-2">❓ FAQs</a>
+    </div>
+  </nav>
+
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  
+  <main class="relative z-10 container mx-auto px-4 py-8 md:py-16 max-w-6xl">
+    
+    <!-- Hero Section -->
+    <header class="text-center mb-12 md:mb-20 fade-in" role="banner" style="animation-delay: 0.05s">
+      <div class="inline-block mb-6" aria-hidden="true">
+        <span class="text-7xl md:text-8xl select-none" role="img" aria-label="Ballot box">🗳️</span>
+      </div>
+      <h1 class="text-4xl md:text-7xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-orange-300 via-white to-green-300 bg-clip-text text-transparent">
+        चुनाव साथी
+      </h1>
+      <p class="text-xl md:text-3xl font-light text-white/90 mb-3">
+        Chunav Saathi
+      </p>
+      <p class="text-base md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+        AI-powered civic education platform for informed voting in India
+      </p>
+      <div class="inline-flex items-center gap-2 mt-5 px-4 py-1.5 glass-card rounded-full text-xs font-semibold text-green-300 border-none bg-white/5">
+        <span class="w-2 h-2 rounded-full bg-green-400 pulse-dot inline-block"></span>
+        Powered by Gemini 1.5 Flash · ECI Data
+      </div>
+    </header>
+
+    <!-- Three Interactive Paths -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16" aria-label="Main features">
+      
+      <!-- Feature Card 1: Voter Journey -->
+      <article class="glass-card rounded-2xl p-6 md:p-8 cursor-pointer fade-in" 
+               style="animation-delay: 0.15s"
+               role="button"
+               tabindex="0"
+               aria-label="Start Voter Journey"
+               data-feature="journey">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-400/20 rounded-2xl mb-5" aria-hidden="true">
+            <i data-lucide="map" class="w-8 h-8 text-orange-300"></i>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3">
+            🗺️ Voter Journey
+          </h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">
+            5-step guided path from registration to election day. Track progress and become an informed voter.
+          </p>
+          <span class="inline-block w-full bg-white/10 hover:bg-white/20 font-semibold py-3 px-6 rounded-lg btn-glow transition-all border border-white/20">
+            Start Journey →
+          </span>
+        </div>
+      </article>
+
+      <!-- Feature Card 2: Myth Buster -->
+      <article class="glass-card rounded-2xl p-6 md:p-8 cursor-pointer fade-in" 
+               style="animation-delay: 0.25s"
+               role="button"
+               tabindex="0"
+               aria-label="Open Myth Buster"
+               data-feature="myth-buster">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-400/20 rounded-2xl mb-5" aria-hidden="true">
+            <i data-lucide="shield-alert" class="w-8 h-8 text-blue-300"></i>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3">
+            🛡️ Myth Buster
+          </h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">
+            AI fact-checks election rumors instantly. Get verified info in Hindi, English, or Hinglish.
+          </p>
+          <span class="inline-block w-full bg-white/10 hover:bg-white/20 font-semibold py-3 px-6 rounded-lg btn-glow transition-all border border-white/20">
+            Check a Myth →
+          </span>
+        </div>
+      </article>
+
+      <!-- Feature Card 3: Explainer -->
+      <article class="glass-card rounded-2xl p-6 md:p-8 cursor-pointer fade-in" 
+               style="animation-delay: 0.35s"
+               role="button"
+               tabindex="0"
+               aria-label="Open Explainer"
+               data-feature="explainer">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-400/20 rounded-2xl mb-5" aria-hidden="true">
+            <i data-lucide="graduation-cap" class="w-8 h-8 text-purple-300"></i>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3">
+            🎓 Explainer
+          </h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">
+            Simplify complex topics. Learn about EVMs, NOTA, voter ID in easy language.
+          </p>
+          <span class="inline-block w-full bg-white/10 hover:bg-white/20 font-semibold py-3 px-6 rounded-lg btn-glow transition-all border border-white/20">
+            Learn Now →
+          </span>
+        </div>
+      </article>
+      
+    </section>
+
+    <!-- Stats Row -->
+    <section class="grid grid-cols-3 gap-4 mb-16 fade-in" style="animation-delay:0.4s" aria-label="Platform Statistics">
+      <div class="glass-card rounded-xl p-4 text-center"><div class="text-2xl md:text-3xl font-extrabold text-orange-300">97.8%</div><div class="text-xs md:text-sm text-white/60 mt-1">EVM Security Score</div></div>
+      <div class="glass-card rounded-xl p-4 text-center"><div class="text-2xl md:text-3xl font-extrabold text-green-300">5M+</div><div class="text-xs md:text-sm text-white/60 mt-1">Voters Reached</div></div>
+      <div class="glass-card rounded-xl p-4 text-center"><div class="text-2xl md:text-3xl font-extrabold text-blue-300">3</div><div class="text-xs md:text-sm text-white/60 mt-1">Languages Supported</div></div>
+    </section>
+
+    <!-- ═══ SECTION 1: LIVE ELECTION DASHBOARD ═══ -->
+    <section id="s-dashboard" class="mb-16 reveal" aria-label="Live Election Dashboard">
+      <div class="section-header rounded-xl px-5 py-3 mb-6 flex items-center justify-between">
+        <h2 class="text-lg md:text-xl font-bold flex items-center gap-3">
+          <span class="live-badge inline-block w-3 h-3 bg-red-500 rounded-full"></span>
+          LIVE Election Dashboard
+        </h2>
+        <span class="text-xs text-white/50">Simulated Demo Data</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="glass-card rounded-xl p-4 text-center hover:scale-105 transition-transform">
+          <div class="text-3xl font-extrabold text-orange-300" id="ctr-turnout">0%</div>
+          <div class="text-xs text-white/60 mt-1">National Turnout</div>
+          <div class="mt-2 bg-white/10 rounded-full h-1.5"><div id="bar-turnout" class="con-bar bg-gradient-to-r from-orange-400 to-orange-600" style="width:0%"></div></div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center hover:scale-105 transition-transform">
+          <div class="text-3xl font-extrabold text-green-300" id="ctr-votes">0</div>
+          <div class="text-xs text-white/60 mt-1">Total Votes Cast</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center hover:scale-105 transition-transform">
+          <div class="text-3xl font-extrabold text-blue-300" id="ctr-stations">0</div>
+          <div class="text-xs text-white/60 mt-1">Active Stations</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center hover:scale-105 transition-transform">
+          <div class="text-3xl font-extrabold text-purple-300" id="ctr-states">0</div>
+          <div class="text-xs text-white/60 mt-1">States Voting</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-white/70 mb-3">Hourly Voting Trend</h3>
+          <div class="chart-container"><canvas id="trendChart"></canvas></div>
+        </div>
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-white/70 mb-3">Urban vs Rural Participation</h3>
+          <div class="chart-container"><canvas id="splitChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 2: CONSTITUENCY TRACKER ═══ -->
+    <section id="s-tracker" class="mb-16 reveal" aria-label="Constituency Poll Tracker">
+      <div class="section-header rounded-xl px-5 py-3 mb-6">
+        <h2 class="text-lg md:text-xl font-bold">🗺️ Constituency Poll Tracker</h2>
+      </div>
+      <div class="glass-card rounded-xl p-5 mb-4">
+        <div class="flex gap-3 mb-4">
+          <input id="conSearch" type="text" placeholder="Search constituency..." class="flex-1 bg-white/10 rounded-lg px-4 py-2 text-sm border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/30" aria-label="Search constituency">
+          <select id="stateFilter" class="bg-white/10 border border-white/10 text-white rounded-lg px-3 py-2 text-sm focus:outline-none" aria-label="Filter by state">
+            <option value="all">All States</option>
+            <option>Maharashtra</option><option>Gujarat</option><option>Karnataka</option>
+            <option>Tamil Nadu</option><option>UP</option><option>Delhi</option>
+          </select>
+        </div>
+        <div id="conList" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar"></div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION: VOTER HEATMAP & BOOTH INTELLIGENCE ═══ -->
+    <section id="s-heatmap" class="mb-16 reveal" aria-label="Smart Voting Planner">
+      <div class="section-header rounded-xl px-5 py-3 mb-6 flex items-center gap-3">
+        <h2 class="text-lg md:text-xl font-bold">🔥 Smart Voting Planner &amp; Booth Intelligence</h2>
+        <span class="text-xs text-white/50 ml-auto">Mock Demo Data</span>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          <!-- LEFT: Bubble Density Map -->
+          <div>
+            <h3 class="text-base font-bold mb-4 flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-5 h-5 text-orange-300"></i>
+              Live Crowd Density by State
+            </h3>
+            <!-- SVG bubble map of India states -->
+            <div id="indiaMap" class="relative bg-white/5 rounded-xl p-4 min-h-[360px] overflow-hidden">
+              <svg id="indiaBubbleMap" viewBox="0 0 520 480" class="w-full h-full" role="img" aria-label="India voter density map">
+                <!-- Grid background -->
+                <defs>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                  </pattern>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <rect width="520" height="480" fill="url(#grid)"/>
+                <!-- India outline (simplified) -->
+                <path d="M200,30 L260,25 L310,45 L350,60 L380,90 L400,130 L410,170 L420,210 L430,250 L435,290 L440,330 L430,360 L410,380 L390,400 L370,420 L340,440 L310,450 L280,445 L265,430 L255,410 L240,390 L225,370 L210,350 L195,325 L180,300 L165,270 L155,240 L145,210 L140,175 L135,140 L140,105 L155,75 L175,50 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                <!-- State bubbles rendered by JS -->
+                <g id="stateBubbles"></g>
+                <!-- Tooltip -->
+                <g id="mapTooltip" style="display:none">
+                  <rect id="ttBg" rx="6" fill="rgba(13,2,33,0.92)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                  <text id="ttName" x="0" y="0" font-size="11" font-weight="bold" fill="white" font-family="Inter,sans-serif"></text>
+                  <text id="ttVal" x="0" y="0" font-size="10" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif"></text>
+                </g>
+              </svg>
+            </div>
+            <!-- Legend -->
+            <div class="flex gap-4 mt-3 text-xs">
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>Low Crowd</div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span>Medium</div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>High Crowd</div>
+              <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-blue-400 inline-block pulse-dot"></span>Active</div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Booth Intelligence Panel -->
+          <div class="space-y-4">
+            <h3 class="text-base font-bold flex items-center gap-2">
+              <i data-lucide="clock" class="w-5 h-5 text-orange-300"></i>
+              Polling Booth Intelligence
+            </h3>
+
+            <!-- Search -->
+            <div>
+              <label for="boothSearch" class="block text-xs font-semibold text-white/70 mb-2">Search Your Polling Booth</label>
+              <div class="flex gap-2">
+                <input type="text" id="boothSearch" placeholder="Enter booth name or constituency..." autocomplete="off"
+                  class="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-orange-500/50" aria-label="Search polling booth">
+                <button id="boothSearchBtn" class="bg-gradient-to-r from-orange-500 to-green-600 px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition shrink-0">Search</button>
+              </div>
+              <div id="boothSuggestions" class="hidden mt-1 glass-card rounded-lg overflow-hidden text-sm"></div>
+            </div>
+
+            <!-- Booth Detail Card -->
+            <div id="boothDetails" class="hidden glass-card rounded-xl p-4 border border-white/10">
+              <div class="flex justify-between items-start mb-3">
+                <div>
+                  <h4 id="boothName" class="font-bold text-sm">—</h4>
+                  <p id="boothConstituency" class="text-xs text-white/60 mt-0.5">—</p>
+                </div>
+                <span id="boothCrowdBadge" class="px-2 py-0.5 rounded-full text-xs font-bold"></span>
+              </div>
+              <div class="space-y-2">
+                <div>
+                  <div class="flex justify-between text-xs mb-1 text-white/70">
+                    <span>Current Queue</span>
+                    <span id="boothQueue" class="font-bold text-white">—</span>
+                  </div>
+                  <div class="bg-white/20 rounded-full h-1.5"><div id="boothQueueBar" class="h-1.5 rounded-full transition-all duration-700"></div></div>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-white/70">Expected Wait</span>
+                  <span id="boothWait" class="font-bold">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Best Times -->
+            <div class="glass-card rounded-xl p-4">
+              <h4 class="text-sm font-semibold mb-3 flex items-center gap-2">
+                <i data-lucide="trending-down" class="w-4 h-4 text-green-400"></i>
+                Best Times to Vote Today
+              </h4>
+              <div id="hourlyBars" class="space-y-2"></div>
+              <p class="text-xs text-green-300 mt-3 flex items-center gap-1">
+                <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>
+                <span id="bestTimeHint">Loading recommendation...</span>
+              </p>
+            </div>
+
+            <!-- Accessibility -->
+            <div class="glass-card rounded-xl p-4">
+              <h4 class="text-sm font-semibold mb-3 flex items-center gap-2">
+                <i data-lucide="accessibility" class="w-4 h-4 text-blue-300"></i>
+                Accessibility at Your Booth
+              </h4>
+              <div id="accessibilityList" class="grid grid-cols-2 gap-1.5 text-xs"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nearby Booths -->
+        <div id="nearbyBooths" class="hidden mt-6">
+          <h4 class="text-sm font-semibold mb-3 text-white/80">Alternative Booths Nearby</h4>
+          <div id="nearbyList" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION: ELECTION TIME MACHINE ═══ -->
+    <section id="s-history" class="mb-16 reveal" aria-label="Election Time Machine">
+      <div class="section-header rounded-xl px-5 py-3 mb-6 flex items-center gap-3">
+        <h2 class="text-lg md:text-xl font-bold">⏰ Election Time Machine</h2>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 md:p-8">
+        
+        <!-- Interactive Timeline Scrubber -->
+        <div class="mb-8">
+          <h3 class="text-xl font-bold mb-4 text-center">Select Election Year</h3>
+          
+          <!-- Timeline Slider -->
+          <div class="relative px-4">
+            <input 
+              type="range" 
+              id="yearSlider" 
+              min="1952" 
+              max="2024" 
+              step="1" 
+              value="2024"
+              class="w-full h-3 bg-white/20 rounded-lg appearance-none cursor-pointer"
+            />
+            
+            <!-- Year markers -->
+            <div class="flex justify-between text-xs text-white/60 mt-2 px-2">
+              <span>1952</span>
+              <span>1967</span>
+              <span>1980</span>
+              <span>1998</span>
+              <span>2014</span>
+              <span>2024</span>
+            </div>
+          </div>
+
+          <!-- Selected Year Display -->
+          <div class="text-center mt-4">
+            <div class="inline-block glass-card border border-white/10 rounded-lg px-6 py-3">
+              <span class="text-sm text-white/70">Viewing Election:</span>
+              <span id="selectedYear" class="text-3xl font-bold ml-3 text-orange-400">2024</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison Mode Toggle -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+          <button id="singleViewBtn" class="px-6 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-green-500 font-semibold hover:shadow-lg transition">
+            Single Year View
+          </button>
+          <button id="compareViewBtn" class="px-6 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold hover:bg-white/20 transition">
+            Compare 2019 vs 2024
+          </button>
+        </div>
+
+        <!-- SINGLE YEAR VIEW -->
+        <div id="singleView" class="block">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Left: Election Summary -->
+            <div class="glass-card border border-white/10 rounded-lg p-6">
+              <h4 class="text-xl font-bold mb-4" id="electionTitle">2024 Lok Sabha Elections</h4>
+              
+              <div class="space-y-4">
+                <div class="flex justify-between">
+                  <span class="text-white/70">Total Seats:</span>
+                  <span class="font-bold" id="totalSeats">543</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-white/70">Voter Turnout:</span>
+                  <span class="font-bold text-green-400" id="voterTurnout">67.4%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-white/70">Eligible Voters:</span>
+                  <span class="font-bold" id="eligibleVoters">968 Million</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-white/70">Votes Polled:</span>
+                  <span class="font-bold" id="votesPolled">642 Million</span>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-white/20">
+                <h5 class="font-semibold mb-3">Winning Alliance/Party</h5>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg border-2 border-white/20" id="winnerBadge" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                    BJP
+                  </div>
+                  <div>
+                    <div class="font-bold text-lg" id="winnerName">Bharatiya Janata Party</div>
+                    <div class="text-sm text-white/70" id="winnerAlliance">NDA Alliance</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Seat Distribution Chart -->
+            <div class="glass-card border border-white/10 rounded-lg p-6">
+              <h4 class="text-xl font-bold mb-4">Seat Distribution</h4>
+              
+              <!-- Party-wise seats (horizontal bars) -->
+              <div class="space-y-3" id="seatDistribution">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Your Constituency Historical View -->
+          <div class="glass-card border border-white/10 rounded-lg p-6 mt-6">
+            <h4 class="text-xl font-bold mb-4">Your Constituency: Mumbai North</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h5 class="font-semibold mb-3">Winning Candidate (2024)</h5>
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-2xl font-bold border-2 border-white/20">
+                    PG
+                  </div>
+                  <div>
+                    <div class="font-bold">Piyush Goyal</div>
+                    <div class="text-sm text-white/70">BJP</div>
+                    <div class="text-xs text-green-400 font-semibold mt-1">Won by 4.8 lakh votes</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h5 class="font-semibold mb-3">Historical Trends (Last 5 Elections)</h5>
+                <div class="text-sm space-y-2">
+                  <div class="flex justify-between items-center">
+                    <span>2024: BJP</span>
+                    <span class="text-orange-400 font-bold">✓</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>2019: BJP</span>
+                    <span class="text-orange-400 font-bold">✓</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>2014: BJP</span>
+                    <span class="text-orange-400 font-bold">✓</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>2009: INC</span>
+                    <span class="text-blue-400 font-bold">✓</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>2004: INC</span>
+                    <span class="text-blue-400 font-bold">✓</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPARISON VIEW (2019 vs 2024) -->
+        <div id="compareView" class="hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- 2019 Column -->
+            <div class="glass-card border border-white/10 rounded-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-2xl font-bold">2019 Election</h4>
+                <span class="px-3 py-1 rounded-full bg-blue-500/30 text-blue-300 text-xs font-semibold">
+                  Previous
+                </span>
+              </div>
+
+              <div class="space-y-4 mb-6">
+                <div class="flex justify-between text-sm">
+                  <span class="text-white/70">Voter Turnout:</span>
+                  <span class="font-bold">67.11%</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-white/70">Total Votes:</span>
+                  <span class="font-bold">614 Million</span>
+                </div>
+              </div>
+
+              <h5 class="font-semibold mb-3">Seat Distribution (2019)</h5>
+              <div class="space-y-2">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="w-16">BJP: 303</span>
+                  <div class="flex-1 mx-3 bg-white/20 rounded-full h-4 overflow-hidden">
+                    <div class="bg-orange-500 h-full" style="width: 56%"></div>
+                  </div>
+                  <span class="font-bold w-10 text-right">56%</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="w-16">INC: 52</span>
+                  <div class="flex-1 mx-3 bg-white/20 rounded-full h-4 overflow-hidden">
+                    <div class="bg-blue-500 h-full" style="width: 10%"></div>
+                  </div>
+                  <span class="font-bold w-10 text-right">10%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2024 Column -->
+            <div class="glass-card rounded-lg p-6 border border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-2xl font-bold">2024 Election</h4>
+                <span class="px-3 py-1 rounded-full bg-orange-500/30 text-orange-300 text-xs font-semibold">
+                  Current
+                </span>
+              </div>
+
+              <div class="space-y-4 mb-6">
+                <div class="flex justify-between text-sm">
+                  <span class="text-white/70">Voter Turnout:</span>
+                  <span class="font-bold text-green-400 flex items-center gap-1">
+                    67.40%
+                    <span class="text-xs bg-green-500/20 px-1 rounded">↑ 0.29%</span>
+                  </span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-white/70">Total Votes:</span>
+                  <span class="font-bold text-green-400 flex items-center gap-1">
+                    642 Million
+                    <span class="text-xs bg-green-500/20 px-1 rounded">↑ 28M</span>
+                  </span>
+                </div>
+              </div>
+
+              <h5 class="font-semibold mb-3">Seat Distribution (2024)</h5>
+              <div class="space-y-2">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="w-16">BJP: 303</span>
+                  <div class="flex-1 mx-3 bg-white/20 rounded-full h-4 overflow-hidden">
+                    <div class="bg-orange-500 h-full" style="width: 56%"></div>
+                  </div>
+                  <span class="font-bold w-10 text-right">56%</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="w-16">INC: 99</span>
+                  <div class="flex-1 mx-3 bg-white/20 rounded-full h-4 overflow-hidden">
+                    <div class="bg-blue-500 h-full" style="width: 18%"></div>
+                  </div>
+                  <span class="font-bold text-green-400 w-10 text-right flex items-center gap-1">
+                    18%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Key Changes Summary -->
+          <div class="glass-card border border-white/10 rounded-lg p-6 mt-6">
+            <h4 class="text-xl font-bold mb-4">📊 Key Changes (2019 → 2024)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="text-center bg-white/5 rounded-lg p-4">
+                <div class="text-3xl font-bold text-green-400 mb-1">↑ 28M</div>
+                <div class="text-sm text-white/70">More Votes Cast</div>
+              </div>
+              <div class="text-center bg-white/5 rounded-lg p-4">
+                <div class="text-3xl font-bold text-green-400 mb-1">↑ 0.29%</div>
+                <div class="text-sm text-white/70">Turnout Increase</div>
+              </div>
+              <div class="text-center bg-white/5 rounded-lg p-4">
+                <div class="text-3xl font-bold text-blue-400 mb-1">↑ 47</div>
+                <div class="text-sm text-white/70">INC Seat Gain</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 3: NEWS FEED ═══ -->
+
+    <section id="s-news" class="mb-16 reveal" aria-label="Election News Feed">
+      <div class="section-header rounded-xl px-5 py-3 mb-6">
+        <h2 class="text-lg md:text-xl font-bold">📰 Verified Election News</h2>
+      </div>
+      <div class="flex gap-2 mb-4 flex-wrap">
+        <button class="news-filter active px-4 py-1.5 rounded-full text-xs font-semibold bg-orange-500/30 border border-orange-400/40" data-filter="all">All</button>
+        <button class="news-filter px-4 py-1.5 rounded-full text-xs font-semibold bg-white/10 border border-white/20" data-filter="breaking">Breaking</button>
+        <button class="news-filter px-4 py-1.5 rounded-full text-xs font-semibold bg-white/10 border border-white/20" data-filter="eci">ECI Updates</button>
+        <button class="news-filter px-4 py-1.5 rounded-full text-xs font-semibold bg-white/10 border border-white/20" data-filter="factcheck">Fact-Checks</button>
+      </div>
+      <div id="newsFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ═══ SECTION 4: VOTER PARTICIPATION TRACKER ═══ -->
+    <section id="s-participation" class="mb-16 reveal" aria-label="Voter Participation Tracker">
+      <div class="section-header rounded-xl px-5 py-3 mb-6">
+        <h2 class="text-lg md:text-xl font-bold">🏆 State-wise Participation Leaderboard</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-white/70 mb-4">🥇 Top Performing States</h3>
+          <div id="topStates" class="space-y-3"></div>
+        </div>
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-white/70 mb-4">📊 2024 vs 2019 Comparison</h3>
+          <div class="chart-container"><canvas id="compareChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 5: EVM SIMULATOR ═══ -->
+    <section id="s-evm" class="mb-16 reveal" aria-label="EVM Voting Simulator">
+      <div class="section-header rounded-xl px-5 py-3 mb-6">
+        <h2 class="text-lg md:text-xl font-bold">🎮 Virtual EVM Simulator</h2>
+      </div>
+      <div class="glass-card rounded-xl p-6">
+        <p class="text-sm text-white/70 mb-6 text-center">Experience the exact voting process before election day. Click a candidate button to cast your vote!</p>
+        <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
+          <!-- EVM Visual -->
+          <div class="glass-card rounded-2xl p-6 w-64 text-center border border-white/20">
+            <div class="text-xs font-bold text-white/50 mb-3 tracking-widest">ELECTRONIC VOTING MACHINE</div>
+            <div class="bg-white/5 rounded-xl p-3 mb-4 text-xs text-white/40">Constituency: Demo Nagar</div>
+            <div id="evmCandidates" class="space-y-2 mb-4"></div>
+            <div id="vvpatSlip" class="hidden bg-white text-gray-900 text-xs rounded-lg p-3 text-left mt-3 border-2 border-dashed border-gray-400">
+              <div class="font-bold text-center mb-1">✅ VVPAT SLIP</div>
+              <div id="vvpatContent"></div>
+              <div class="text-gray-500 text-center mt-1">Visible for 7 seconds</div>
+            </div>
+          </div>
+          <!-- Instructions -->
+          <div class="flex-1 space-y-4 max-w-sm">
+            <div id="evmStep" class="glass-card rounded-xl p-4 text-center">
+              <div class="text-4xl mb-2">👆</div>
+              <p class="text-sm text-white/80">Press any candidate button on the EVM to cast your vote</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-start gap-3"><span class="text-orange-400 font-bold">1.</span><span class="text-white/80">Queue and show your EPIC to the Presiding Officer</span></div>
+              <div class="flex items-start gap-3"><span class="text-orange-400 font-bold">2.</span><span class="text-white/80">Get indelible ink on your left index finger</span></div>
+              <div class="flex items-start gap-3"><span class="text-green-400 font-bold">3.</span><span class="text-white/80">Press the blue button next to your candidate</span></div>
+              <div class="flex items-start gap-3"><span class="text-green-400 font-bold">4.</span><span class="text-white/80">Verify VVPAT slip (visible 7 seconds)</span></div>
+              <div class="flex items-start gap-3"><span class="text-blue-400 font-bold">5.</span><span class="text-white/80">Long beep = vote recorded. Exit the booth!</span></div>
+            </div>
+            <button onclick="resetEVM()" class="w-full glass-card rounded-xl py-2 text-sm hover:bg-white/20 transition">🔄 Reset & Try Again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 6: SMART FAQ ═══ -->
+    <section id="s-faq" class="mb-16 reveal" aria-label="Election FAQs">
+      <div class="section-header rounded-xl px-5 py-3 mb-6">
+        <h2 class="text-lg md:text-xl font-bold">❓ Smart FAQ — Ask Anything</h2>
+      </div>
+      <div class="glass-card rounded-xl p-5">
+        <input id="faqSearch" type="text" placeholder="Search: Can I vote without Voter ID?" class="w-full bg-white/10 rounded-xl px-4 py-3 text-sm border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/30 mb-5" aria-label="Search FAQs">
+        <div class="flex gap-2 mb-5 flex-wrap">
+          <button class="faq-cat active text-xs px-3 py-1 rounded-full bg-orange-500/30 border border-orange-400/40" data-cat="all">All</button>
+          <button class="faq-cat text-xs px-3 py-1 rounded-full bg-white/10 border border-white/20" data-cat="registration">Registration</button>
+          <button class="faq-cat text-xs px-3 py-1 rounded-full bg-white/10 border border-white/20" data-cat="process">Process</button>
+          <button class="faq-cat text-xs px-3 py-1 rounded-full bg-white/10 border border-white/20" data-cat="evm">EVM & VVPAT</button>
+          <button class="faq-cat text-xs px-3 py-1 rounded-full bg-white/10 border border-white/20" data-cat="firsttime">First-Time Voters</button>
+        </div>
+        <div id="faqList" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- Feature Card 1: Voter Journey -->
+      <article class="glass-card rounded-2xl p-6 md:p-8 cursor-pointer fade-in" style="animation-delay:0.15s" role="button" tabindex="0" aria-label="Start Voter Journey" data-feature="journey">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-400/20 rounded-2xl mb-5" aria-hidden="true"><i data-lucide="map" class="w-8 h-8 text-orange-300"></i></div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3">🗺️ Voter Journey</h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">5-step guided path from registration to election day. Track progress and become an informed voter.</p>
+          <span class="inline-block w-full bg-white/10 hover:bg-white/20 font-semibold py-3 px-6 rounded-lg btn-glow transition-all border border-white/20">Start Journey →</span>
+        </div>
+      </article>
+      <!-- Feature Card 2: Myth Buster -->
+      <article class="glass-card rounded-2xl p-6 md:p-8 cursor-pointer fade-in" style="animation-delay:0.25s" role="button" tabindex="0" aria-label="Open Myth Buster" data-feature="myth-buster">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-400/20 rounded-2xl mb-5" aria-hidden="true"><i data-lucide="shield-alert" class="w-8 h-8 text-blue-300"></i></div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3">🛡️ Myth Buster</h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">AI fact-checks election rumors instantly. Get verified info in Hindi, English, or Hinglish.</p>
+          <span class="inline-block w-full bg-white/10 hover:bg-white/20 font-semibold py-3 px-6 rounded-lg btn-glow transition-all border border-white/20">Check a Myth →</span>
+        </div>
+      </article>
+      <!-- Feature Card 3: Explainer -->
+      <article class="glass-card rounded-2xl p-6 md:p-8 cursor-pointer fade-in" style="animation-delay:0.35s" role="button" tabindex="0" aria-label="Open Explainer" data-feature="explainer">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-400/20 rounded-2xl mb-5" aria-hidden="true"><i data-lucide="graduation-cap" class="w-8 h-8 text-purple-300"></i></div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3">🎓 Explainer</h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">Simplify complex topics. Learn about EVMs, NOTA, voter ID in easy language.</p>
+          <span class="inline-block w-full bg-white/10 hover:bg-white/20 font-semibold py-3 px-6 rounded-lg btn-glow transition-all border border-white/20">Learn Now →</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-white/60 text-sm md:text-base fade-in mb-20" role="contentinfo">
+      <p class="mb-2">Built with ❤️ for PromptWars Challenge 2</p>
+      <p class="text-xs md:text-sm">Powered by Gemini 2.0 Flash | Google Cloud | Firestore</p>
+      <p class="text-xs mt-2">Data from Election Commission of India (ECI)</p>
+    </footer>
+  </main>
+
+  <!-- Floating Action Button -->
+  <div class="fab">
+    <div id="fabMenu" class="fab-menu items-end">
+      <button onclick="document.querySelector('[data-feature=\'myth-buster\']').click()" class="glass-card rounded-xl px-4 py-2 text-sm whitespace-nowrap hover:bg-white/20 transition">🛡️ Myth Buster</button>
+      <button onclick="document.querySelector('[data-feature=\'explainer\']').click()" class="glass-card rounded-xl px-4 py-2 text-sm whitespace-nowrap hover:bg-white/20 transition">🎓 Explainer</button>
+      <button onclick="window.location.href='/journey.html'" class="glass-card rounded-xl px-4 py-2 text-sm whitespace-nowrap hover:bg-white/20 transition">🗺️ Voter Journey</button>
+    </div>
+    <button id="fabToggle" onclick="document.getElementById('fabMenu').classList.toggle('open')" class="glass-card w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 transition-transform" aria-label="Quick tools">⚡</button>
+  </div>
+
+  <!-- MYTH BUSTER MODAL -->
+  <div id="mythBusterModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" role="dialog" aria-labelledby="mythBusterTitle" aria-modal="true">
+    <div class="glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col bg-[#140b2e]/80">
+      <header class="flex justify-between items-center p-6 border-b border-white/10">
+        <h2 id="mythBusterTitle" class="text-2xl md:text-3xl font-bold">🛡️ Myth Buster</h2>
+        <button id="closeMythBuster" class="text-white/80 hover:text-white transition" aria-label="Close Myth Buster"><i data-lucide="x" class="w-8 h-8"></i></button>
+      </header>
+      <div class="flex gap-2 p-4 bg-white/5 border-b border-white/10" role="group" aria-label="Language selection">
+        <button data-lang="hi" class="lang-btn flex-1 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition text-sm font-medium" aria-pressed="false">हिंदी</button>
+        <button data-lang="en" class="lang-btn flex-1 px-4 py-2 rounded-lg bg-white/30 hover:bg-white/40 transition font-bold text-sm" aria-pressed="true">English</button>
+        <button data-lang="hinglish" class="lang-btn flex-1 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition text-sm font-medium" aria-pressed="false">Hinglish</button>
+      </div>
+      <div id="chatContainer" class="flex-1 overflow-y-auto p-6 bg-black/10 min-h-[300px] custom-scrollbar" role="log" aria-live="polite" aria-atomic="false">
+        <div class="text-center text-white/40 py-12" id="chatPlaceholder"><i data-lucide="message-circle" class="w-16 h-16 mx-auto mb-4 opacity-50"></i><p>Enter an election myth to fact-check...</p></div>
+      </div>
+      <form id="mythForm" class="p-4 border-t border-white/10">
+        <div class="flex gap-2">
+          <label for="mythInput" class="sr-only">Enter election myth to fact-check</label>
+          <textarea id="mythInput" name="mythText" placeholder="e.g., EVMs can be hacked remotely using Bluetooth..." class="flex-1 bg-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/30 resize-none text-sm" rows="2" maxlength="500" required aria-required="true"></textarea>
+          <button type="submit" class="bg-white/20 hover:bg-white/30 px-4 md:px-6 rounded-xl btn-glow transition-all flex items-center justify-center shrink-0" aria-label="Submit myth"><i data-lucide="send" class="w-5 h-5"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EXPLAINER MODAL -->
+  <div id="explainerModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" role="dialog" aria-labelledby="explainerTitle" aria-modal="true">
+    <div class="glass-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 custom-scrollbar bg-[#140b2e]/80">
+      <header class="flex justify-between items-center mb-6">
+        <h2 id="explainerTitle" class="text-2xl md:text-3xl font-bold">🎓 Explainer</h2>
+        <button id="closeExplainer" class="text-white/80 hover:text-white transition" aria-label="Close Explainer"><i data-lucide="x" class="w-8 h-8"></i></button>
+      </header>
+      <form id="explainerForm">
+        <div class="mb-5">
+          <label for="topicSelect" class="block text-sm font-semibold text-white/80 mb-2">Select Topic</label>
+          <select id="topicSelect" name="topic" class="w-full bg-white/10 border border-white/10 text-white rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-white/30" required>
+            <option value="EVM">Electronic Voting Machines (EVM)</option>
+            <option value="VVPAT">VVPAT - Voter Verified Paper Audit Trail</option>
+            <option value="NOTA">NOTA - None of the Above</option>
+            <option value="Voter ID">Voter ID Card (EPIC)</option>
+            <option value="Polling Booth">How Polling Booths Work</option>
+            <option value="Model Code of Conduct">Model Code of Conduct</option>
+            <option value="First Time Voter">First Time Voter Guide</option>
+          </select>
+        </div>
+        <div class="mb-6">
+          <div class="flex justify-between text-sm font-semibold text-white/80 mb-2">
+            <label for="complexitySlider">Explanation Complexity</label>
+            <span><span id="complexityValue">3 - Balanced</span></span>
+          </div>
+          <input type="range" id="complexitySlider" name="complexity" min="1" max="5" value="3" class="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-purple-400" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3">
+          <div class="flex justify-between text-white/50 text-xs mt-2"><span>👶 Simple (ELI5)</span><span>🎓 Technical</span></div>
+        </div>
+        <div id="explanationContainer" class="bg-white/5 border border-white/10 rounded-xl p-6 min-h-[200px]" role="region" aria-live="polite" aria-atomic="true">
+          <p class="text-white/40 text-center py-8">Select a topic and click "Explain" to learn more</p>
+        </div>
+        <button type="submit" class="w-full bg-white/10 border border-white/20 hover:bg-white/20 font-semibold py-3 rounded-xl btn-glow transition-all mt-5">Explain This Topic</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+
+    /**
+     * Chunav Saathi - Main Application Module
+     * Implements glassmorphism UI with AI-powered civic education features
+     */
+    (function() {
+      'use strict';
+
+      // ==========================================
+      // STATE MANAGEMENT
+      // ==========================================
+      
+      /** @typedef {Object} AppState */
+      const AppState = {
+        currentLanguage: 'en',
+        isProcessing: false,
+        complexityLabels: {
+          1: '1 - Simple (ELI5)',
+          2: '2 - Easy',
+          3: '3 - Balanced',
+          4: '4 - Detailed',
+          5: '5 - Expert'
+        }
+      };
+
+      // ==========================================
+      // INITIALIZATION
+      // ==========================================
+      
+      /**
+       * Initialize application on DOM ready
+       */
+      function init() {
+        lucide.createIcons();
+        setupEventListeners();
+        setupKeyboardNavigation();
+        setupAccessibility();
+      }
+
+      // ==========================================
+      // EVENT LISTENERS
+      // ==========================================
+      
+      /**
+       * Set up all event listeners using event delegation where appropriate
+       */
+      function setupEventListeners() {
+        // Feature card navigation
+        document.querySelectorAll('[data-feature]').forEach(card => {
+          card.addEventListener('click', handleFeatureClick);
+          card.addEventListener('keydown', handleFeatureKeydown);
+        });
+
+        // Modal close buttons
+        document.getElementById('closeMythBuster')?.addEventListener('click', closeMythBuster);
+        document.getElementById('closeExplainer')?.addEventListener('click', closeExplainer);
+
+        // Language selection (event delegation)
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.addEventListener('click', handleLanguageChange);
+        });
+
+        // Forms
+        document.getElementById('mythForm')?.addEventListener('submit', handleMythSubmit);
+        document.getElementById('explainerForm')?.addEventListener('submit', handleExplainerSubmit);
+
+        // Complexity slider
+        document.getElementById('complexitySlider')?.addEventListener('input', handleComplexityChange);
+
+        // Submit myth on enter (no shift)
+        const mythInput = document.getElementById('mythInput');
+        if (mythInput) {
+          mythInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              document.getElementById('mythForm')?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            }
+          });
+        }
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', handleEscapeKey);
+
+        // Close modals on backdrop click
+        document.getElementById('mythBusterModal')?.addEventListener('click', handleBackdropClick);
+        document.getElementById('explainerModal')?.addEventListener('click', handleBackdropClick);
+      }
+
+      /**
+       * Set up keyboard navigation for accessibility
+       */
+      function setupKeyboardNavigation() {
+        // Allow Enter/Space on card elements
+        document.querySelectorAll('[role="button"]').forEach(el => {
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              el.click();
+            }
+          });
+        });
+      }
+
+      /**
+       * Set up accessibility features
+       */
+      function setupAccessibility() {
+        // Update complexity slider aria-valuenow on change
+        const slider = document.getElementById('complexitySlider');
+        if (slider) {
+          slider.addEventListener('input', () => {
+            slider.setAttribute('aria-valuenow', slider.value);
+          });
+        }
+      }
+
+      // ==========================================
+      // FEATURE CARD HANDLERS
+      // ==========================================
+      
+      /**
+       * Handle feature card clicks
+       * @param {Event} e - Click event
+       */
+      function handleFeatureClick(e) {
+        const feature = e.currentTarget.dataset.feature;
+        
+        switch(feature) {
+          case 'journey':
+            window.location.href = '/journey.html';
+            break;
+          case 'myth-buster':
+            openMythBuster();
+            break;
+          case 'explainer':
+            openExplainer();
+            break;
+        }
+      }
+
+      /**
+       * Handle keyboard navigation on feature cards
+       * @param {KeyboardEvent} e - Keyboard event
+       */
+      function handleFeatureKeydown(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.currentTarget.click();
+        }
+      }
+
+      // ==========================================
+      // MYTH BUSTER MODAL
+      // ==========================================
+      
+      /**
+       * Open Myth Buster modal and set focus
+       */
+      function openMythBuster() {
+        const modal = document.getElementById('mythBusterModal');
+        modal?.classList.remove('hidden');
+        
+        // Focus first interactive element for accessibility
+        setTimeout(() => {
+          document.querySelector('.lang-btn')?.focus();
+        }, 100);
+        
+        lucide.createIcons();
+      }
+
+      /**
+       * Close Myth Buster modal
+       */
+      function closeMythBuster() {
+        document.getElementById('mythBusterModal')?.classList.add('hidden');
+        // Return focus to trigger element
+        document.querySelector('[data-feature="myth-buster"]')?.focus();
+      }
+
+      /**
+       * Handle language selection
+       * @param {Event} e - Click event
+       */
+      function handleLanguageChange(e) {
+        const lang = e.target.dataset.lang;
+        if (!lang) return;
+
+        AppState.currentLanguage = lang;
+
+        // Update button states
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          const isActive = btn.dataset.lang === lang;
+          btn.classList.toggle('bg-white/30', isActive);
+          btn.classList.toggle('font-bold', isActive);
+          btn.classList.toggle('bg-white/10', !isActive);
+          btn.classList.toggle('font-medium', !isActive);
+          btn.setAttribute('aria-pressed', isActive);
+        });
+      }
+
+      /**
+       * Handle myth form submission
+       * @param {Event} e - Submit event
+       */
+      async function handleMythSubmit(e) {
+        e.preventDefault();
+        
+        if (AppState.isProcessing) return;
+
+        const input = document.getElementById('mythInput');
+        const text = input?.value.trim();
+        
+        if (!text) return;
+
+        AppState.isProcessing = true;
+
+        try {
+          await checkMyth(text);
+          input.value = '';
+        } catch (error) {
+          handleError(error, 'myth-check');
+        } finally {
+          AppState.isProcessing = false;
+        }
+      }
+
+      /**
+       * Check myth via API and display result
+       * @param {string} mythText - Text to fact-check
+       */
+      async function checkMyth(mythText) {
+        const chatContainer = document.getElementById('chatContainer');
+        if (!chatContainer) return;
+
+        // Clear placeholder if first message
+        document.getElementById('chatPlaceholder')?.remove();
+
+        // Add user message
+        appendMessage(chatContainer, 'user', sanitizeHtml(mythText));
+
+        // Add loading indicator
+        const loadingId = appendLoadingMessage(chatContainer);
+
+        try {
+          const response = await fetch('/api/v1/myth-check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              text: mythText, 
+              lang: AppState.currentLanguage 
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+
+          // Remove loading
+          document.getElementById(loadingId)?.remove();
+
+          // Display result
+          appendMythResult(chatContainer, data);
+
+        } catch (error) {
+          document.getElementById(loadingId)?.remove();
+          appendMessage(chatContainer, 'error', `Error: ${sanitizeHtml(error.message)}`);
+          throw error;
+        }
+      }
+
+      /**
+       * Append user/AI message to chat
+       * @param {HTMLElement} container - Chat container
+       * @param {string} type - Message type: 'user', 'assistant', 'error'
+       * @param {string} content - Message content (already sanitized)
+       */
+      function appendMessage(container, type, content) {
+        const alignment = type === 'user' ? 'justify-end' : 'justify-start';
+        const bgClass = type === 'error' ? 'bg-red-500/30 text-red-200' : 
+                       type === 'user' ? 'bg-white/20' : 'bg-white/10 border border-white/10';
+
+        container.insertAdjacentHTML('beforeend', `
+          <div class="flex ${alignment} mb-4">
+            <div class="${bgClass} rounded-xl p-4 max-w-[85%] text-sm md:text-base">
+              ${content}
+            </div>
+          </div>
+        `);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      /**
+       * Append loading message
+       * @param {HTMLElement} container - Chat container
+       * @returns {string} Loading element ID
+       */
+      function appendLoadingMessage(container) {
+        const id = 'loading-' + Date.now();
+        container.insertAdjacentHTML('beforeend', `
+          <div class="flex justify-start mb-4" id="${id}">
+            <div class="bg-white/10 border border-white/10 rounded-xl p-3 flex items-center gap-2">
+              <i data-lucide="loader" class="w-4 h-4 spin"></i>
+              <span class="text-sm">Fact-checking...</span>
+            </div>
+          </div>
+        `);
+        lucide.createIcons();
+        container.scrollTop = container.scrollHeight;
+        return id;
+      }
+
+      /**
+       * Append myth check result
+       * @param {HTMLElement} container - Chat container
+       * @param {Object} data - API response data
+       */
+      function appendMythResult(container, data) {
+        const explanation = AppState.currentLanguage === 'hi' ? 
+                          data.explanation_hi : data.explanation_en;
+        
+        const score = Number(data.truthScore ?? 0);
+        const scoreClass = score >= 70 ? 'progress-high' :
+                           score >= 30 ? 'progress-med' : 'progress-low';
+
+        const verdictClass = data.isMythBusted ? 'text-red-300' : 'text-green-300';
+        const verdictText = data.isMythBusted ? '❌ MYTH (False/Misleading)' : '✅ VERIFIED (True)';
+
+        const sourcesHtml = data.sources && data.sources.length > 0 ? `
+          <details class="text-xs mt-3 text-white/60">
+            <summary class="cursor-pointer font-semibold text-white/80">📚 Sources (${data.sources.length})</summary>
+            <ul class="mt-2 space-y-1 pl-4">
+              ${data.sources.map(s => `
+                <li>
+                  <a href="${sanitizeHtml(s.url)}" target="_blank" rel="noopener noreferrer" 
+                     class="underline hover:text-white transition">
+                    ${sanitizeHtml(s.title)}
+                  </a>
+                </li>
+              `).join('')}
+            </ul>
+          </details>
+        ` : '';
+
+        container.insertAdjacentHTML('beforeend', `
+          <div class="flex justify-start mb-4">
+            <div class="bg-white/10 border border-white/10 rounded-xl p-5 max-w-[90%] text-sm md:text-base space-y-3">
+              <p class="leading-relaxed">${sanitizeHtml(explanation)}</p>
+              
+              <!-- Truth Score -->
+              <div>
+                <div class="flex justify-between text-xs mb-1 text-white/60">
+                  <span>Truth Score</span>
+                  <span class="font-bold text-white">${score}/100</span>
+                </div>
+                <div class="bg-white/20 rounded-full h-1.5 overflow-hidden">
+                  <div class="${scoreClass} h-full rounded-full transition-all duration-500" 
+                       style="width: ${score}%"
+                       role="progressbar"
+                       aria-valuenow="${score}"
+                       aria-valuemin="0"
+                       aria-valuemax="100"></div>
+                </div>
+              </div>
+
+              <!-- Verdict -->
+              <div class="text-sm font-bold ${verdictClass}">
+                ${verdictText}
+              </div>
+
+              <!-- Sources -->
+              ${sourcesHtml}
+            </div>
+          </div>
+        `);
+
+        container.scrollTop = container.scrollHeight;
+        lucide.createIcons();
+      }
+
+      // ==========================================
+      // EXPLAINER MODAL
+      // ==========================================
+      
+      /**
+       * Open Explainer modal
+       */
+      function openExplainer() {
+        const modal = document.getElementById('explainerModal');
+        modal?.classList.remove('hidden');
+        
+        setTimeout(() => {
+          document.getElementById('topicSelect')?.focus();
+        }, 100);
+        
+        lucide.createIcons();
+      }
+
+      /**
+       * Close Explainer modal
+       */
+      function closeExplainer() {
+        document.getElementById('explainerModal')?.classList.add('hidden');
+        document.querySelector('[data-feature="explainer"]')?.focus();
+      }
+
+      /**
+       * Handle complexity slider change
+       * @param {Event} e - Input event
+       */
+      function handleComplexityChange(e) {
+        const value = e.target.value;
+        const label = document.getElementById('complexityValue');
+        if (label) {
+          label.textContent = AppState.complexityLabels[value] || value;
+        }
+      }
+
+      /**
+       * Handle explainer form submission
+       * @param {Event} e - Submit event
+       */
+      async function handleExplainerSubmit(e) {
+        e.preventDefault();
+        
+        if (AppState.isProcessing) return;
+
+        const topic = document.getElementById('topicSelect')?.value;
+        const complexity = parseInt(document.getElementById('complexitySlider')?.value || '3');
+
+        if (!topic) return;
+
+        AppState.isProcessing = true;
+
+        try {
+          await getExplanation(topic, complexity);
+        } catch (error) {
+          handleError(error, 'explain');
+        } finally {
+          AppState.isProcessing = false;
+        }
+      }
+
+      /**
+       * Fetch and display explanation
+       * @param {string} topic - Topic to explain
+       * @param {number} complexity - Complexity level (1-5)
+       */
+      async function getExplanation(topic, complexity) {
+        const container = document.getElementById('explanationContainer');
+        if (!container) return;
+
+        // Show loading state
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-10 gap-3 text-white/50">
+            <i data-lucide="loader" class="w-8 h-8 spin"></i>
+            <span class="text-sm">Generating explanation...</span>
+          </div>
+        `;
+        lucide.createIcons();
+
+        try {
+          const response = await fetch('/api/v1/explain', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic, complexity, lang: 'en' })
+          });
+
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+
+          // Display result
+          const keyPointsHtml = data.key_points && data.key_points.length > 0 ? `
+            <div class="mb-4">
+              <h4 class="text-xs font-semibold text-white/50 mb-2 uppercase tracking-wide">Key Points</h4>
+              <ul class="space-y-1 text-sm text-white/90">
+                ${data.key_points.map(p => `<li class="flex gap-2"><span class="text-purple-400 shrink-0">▸</span>${sanitizeHtml(p)}</li>`).join('')}
+              </ul>
+            </div>
+          ` : '';
+
+          const analogyHtml = data.analogy ? `
+            <div class="bg-white/5 rounded-xl p-4 mt-4 border border-white/5">
+              <h4 class="text-xs font-semibold text-white/50 mb-1">💡 Analogy</h4>
+              <p class="text-sm text-white/90">${sanitizeHtml(data.analogy)}</p>
+            </div>
+          ` : '';
+
+          container.innerHTML = `
+            <h3 class="text-lg font-bold mb-3">${sanitizeHtml(topic)}</h3>
+            <p class="mb-4 text-sm md:text-base leading-relaxed text-white/90">
+              ${sanitizeHtml(data.explanation)}
+            </p>
+            ${keyPointsHtml}
+            ${analogyHtml}
+            <div class="text-xs text-white/40 mt-4 pt-4 border-t border-white/10">
+              Complexity Level: ${complexity}/5
+            </div>
+          `;
+
+        } catch (error) {
+          container.innerHTML = `
+            <div class="text-center py-8 text-red-300 text-sm">
+              ⚠️ Error: ${sanitizeHtml(error.message)}
+            </div>
+          `;
+          throw error;
+        }
+      }
+
+      // ==========================================
+      // UTILITY FUNCTIONS
+      // ==========================================
+      
+      /**
+       * Sanitize HTML to prevent XSS attacks
+       * @param {string} text - Text to sanitize
+       * @returns {string} Sanitized text
+       */
+      function sanitizeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      /**
+       * Handle escape key press to close modals
+       * @param {KeyboardEvent} e - Keyboard event
+       */
+      function handleEscapeKey(e) {
+        if (e.key === 'Escape') {
+          const mythModal = document.getElementById('mythBusterModal');
+          const explainerModal = document.getElementById('explainerModal');
+          
+          if (!mythModal?.classList.contains('hidden')) {
+            closeMythBuster();
+          } else if (!explainerModal?.classList.contains('hidden')) {
+            closeExplainer();
+          }
+        }
+      }
+
+      /**
+       * Handle backdrop click to close modals
+       * @param {Event} e - Click event
+       */
+      function handleBackdropClick(e) {
+        if (e.target === e.currentTarget) {
+          if (e.currentTarget.id === 'mythBusterModal') {
+            closeMythBuster();
+          } else if (e.currentTarget.id === 'explainerModal') {
+            closeExplainer();
+          }
+        }
+      }
+
+      /**
+       * Centralized error handler using structured handling (no console.log)
+       * @param {Error} error - Error object
+       * @param {string} context - Error context
+       */
+      function handleError(error, context) {
+        // Structured error handling instead of simple console.log
+        const errorDetails = {
+          timestamp: new Date().toISOString(),
+          context: context,
+          message: error.message,
+          stack: error.stack
+        };
+        
+        // In a real production app, this would send to Sentry, LogRocket, etc.
+        // using navigator.sendBeacon() or a logging API endpoint.
+        // We log to error stream directly as required for structured logging.
+        console.error(JSON.stringify(errorDetails));
+      }
+
+      // ==========================================
+      // INIT ON DOM READY
+      // ==========================================
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+
+  <!-- ============ NEW SECTIONS JAVASCRIPT ============ -->
+  <script>
+  (function() {
+    'use strict';
+
+    // ── Mock Data ──────────────────────────────────────────────────
+    const MOCK = {
+      turnout: 67.8, votes: 523456789, stations: 12453, statesCount: 28,
+      constituencies: [
+        {name:'Mumbai North',state:'Maharashtra',party:'NDA',color:'#f97316',margin:3421,pct:52},
+        {name:'Lucknow',state:'UP',party:'NDA',color:'#f97316',margin:8823,pct:58},
+        {name:'Bangalore South',state:'Karnataka',party:'NDA',color:'#f97316',margin:5210,pct:54},
+        {name:'Chennai Central',state:'Tamil Nadu',party:'INDIA',color:'#3b82f6',margin:2100,pct:48},
+        {name:'Pune',state:'Maharashtra',party:'NDA',color:'#f97316',margin:1234,pct:51},
+        {name:'Ahmedabad East',state:'Gujarat',party:'NDA',color:'#f97316',margin:9012,pct:61},
+        {name:'New Delhi',state:'Delhi',party:'NDA',color:'#f97316',margin:4567,pct:55},
+        {name:'Varanasi',state:'UP',party:'NDA',color:'#f97316',margin:15244,pct:63},
+        {name:'Hyderabad',state:'Telangana',party:'AIMIM',color:'#8b5cf6',margin:3322,pct:49},
+        {name:'Kolkata North',state:'WB',party:'TMC',color:'#22c55e',margin:2890,pct:50},
+      ],
+      states: [
+        {name:'Nagaland',flag:'🏔️',pct:87.2,prev:83.1},
+        {name:'Sikkim',flag:'🌿',pct:82.6,prev:80.3},
+        {name:'Tripura',flag:'🎋',pct:81.8,prev:79.9},
+        {name:'Manipur',flag:'🌸',pct:79.5,prev:76.4},
+        {name:'Goa',flag:'🏖️',pct:78.3,prev:75.1},
+      ],
+      news: [
+        {h:'ECI announces 96.8 crore voters registered for 2024 General Elections',src:'ECI',t:'2h ago',cat:'eci',v:true,fc:null},
+        {h:'VVPAT slips to be matched in 5 randomly selected EVMs per constituency',src:'PIB',t:'4h ago',cat:'eci',v:true,fc:null},
+        {h:'Claim: EVMs can be hacked via Bluetooth signals',src:'Social Media',t:'6h ago',cat:'factcheck',v:false,fc:8},
+        {h:'Voter turnout hits record 67.8% — highest since 1984',src:'NDTV',t:'1h ago',cat:'breaking',v:true,fc:null},
+        {h:'Model Code of Conduct violations: 1,400 cases registered',src:'The Hindu',t:'3h ago',cat:'eci',v:true,fc:null},
+        {h:'Claim: Voting without Aadhaar will invalidate your vote',src:'WhatsApp',t:'8h ago',cat:'factcheck',v:false,fc:12},
+      ],
+      faqs: [
+        {q:'Can I vote without my Voter ID card?',a:'Yes! ECI allows 12 alternate documents including Aadhaar, Passport, Driving License, MNREGA Card, and more. As long as your name is on the Electoral Roll, you can vote.',cat:'registration',views:24531},
+        {q:'How do I register to vote for the first time?',a:'Visit voterportal.eci.gov.in or use the Voter Helpline App. Fill Form 6 (online or offline). Deadline is typically 30 days before election.',cat:'firsttime',views:18234},
+        {q:'Can EVMs be hacked or manipulated remotely?',a:'No. EVMs are standalone machines with no Wi-Fi, Bluetooth, or internet connectivity. They are sealed and verified by all candidates before voting. The VVPAT provides a paper audit trail.',cat:'evm',views:31245},
+        {q:'What is NOTA and when should I use it?',a:'NOTA (None of the Above) is a ballot option for voters who find no candidate suitable. Press the NOTA button (last option) on the EVM. NOTA votes are counted but do not affect results.',cat:'process',views:14822},
+        {q:'Can I take a selfie in the voting booth?',a:'No. Photography inside the voting compartment is strictly prohibited under Section 128 of the Representation of People Act. You can be legally penalized.',cat:'process',views:9102},
+        {q:'What if my name is missing from the voter list?',a:'Contact your local BLO (Booth Level Officer) or ERO (Electoral Registration Officer) immediately. File an application at voterportal.eci.gov.in. You can also call 1950 (National Voter Helpline).',cat:'registration',views:11502},
+        {q:'How does the VVPAT work?',a:'After you press the EVM candidate button, the VVPAT machine prints a slip showing candidate name, symbol, and serial number. This slip is visible for 7 seconds, then drops into a sealed box. It provides a physical audit trail.',cat:'evm',views:8731},
+        {q:'I am a first-time voter. What should I bring on election day?',a:'Bring your Voter ID (EPIC card) or any 1 of 12 approved alternate documents. Wear comfortable clothes. Indelible ink will be applied to your left index finger. Keep your polling booth address handy.',cat:'firsttime',views:21045},
+      ],
+      evmCandidates: [
+        {name:'Amit Kumar',party:'Party A',symbol:'🌸',color:'#f97316'},
+        {name:'Priya Singh',party:'Party B',symbol:'🌿',color:'#3b82f6'},
+        {name:'Ravi Mehta',party:'Party C',symbol:'⭐',color:'#8b5cf6'},
+        {name:'NOTA',party:'None of the Above',symbol:'✗',color:'#6b7280'},
+      ]
+    };
+
+    // ── Smooth scroll + active nav highlight ───────────────────────
+    (function setupNav() {
+      const NAV_HEIGHT = 64; // sticky nav height in px
+
+      // Enable CSS smooth scroll on the whole page
+      document.documentElement.style.scrollBehavior = 'smooth';
+
+      // Handle all anchor clicks — preventDefault + offset for sticky nav
+      document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+        const targetId = link.getAttribute('href').slice(1); // strip '#'
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT - 8;
+        window.scrollTo({ top, behavior: 'smooth' });
+        // Close mobile nav if open
+        document.getElementById('mobileNav')?.classList.remove('open');
+        // Immediately mark clicked link active
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll(`.nav-link[href="#${targetId}"]`).forEach(l => l.classList.add('active'));
+      });
+
+      // IntersectionObserver to highlight active section while scrolling
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            navLinks.forEach(l => {
+              l.classList.toggle('active', l.getAttribute('href') === `#${id}`);
+            });
+          }
+        });
+      }, { rootMargin: `-${NAV_HEIGHT}px 0px -60% 0px`, threshold: 0 });
+
+      sections.forEach(s => obs.observe(s));
+    })();
+
+    // ── Mobile nav toggle ──────────────────────────────────────────
+    window.toggleMobileNav = function() {
+      document.getElementById('mobileNav')?.classList.toggle('open');
+    };
+    document.getElementById('hamBtn')?.addEventListener('click', toggleMobileNav);
+
+    // ── Toast ──────────────────────────────────────────────────────
+    function showToast(msg, icon = 'ℹ️') {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── Scroll Reveal ──────────────────────────────────────────────
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── Counter Animation ──────────────────────────────────────────
+    function animateCount(el, target, suffix = '', decimals = 0, duration = 1800) {
+      const start = performance.now();
+      const update = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        const val = p * target;
+        el.textContent = (decimals > 0 ? val.toFixed(decimals) : Math.floor(val).toLocaleString('en-IN')) + suffix;
+        if (p < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    }
+
+    // ── Dashboard ──────────────────────────────────────────────────
+    function initDashboard() {
+      const dashObs = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
+        dashObs.disconnect();
+        animateCount(document.getElementById('ctr-turnout'), MOCK.turnout, '%', 1);
+        animateCount(document.getElementById('ctr-votes'), MOCK.votes, '');
+        animateCount(document.getElementById('ctr-stations'), MOCK.stations, '');
+        animateCount(document.getElementById('ctr-states'), MOCK.statesCount, '');
+        setTimeout(() => {
+          const bar = document.getElementById('bar-turnout');
+          if (bar) bar.style.width = MOCK.turnout + '%';
+        }, 200);
+        initCharts();
+      }, { threshold: 0.2 });
+      const sec = document.getElementById('s-dashboard');
+      if (sec) dashObs.observe(sec);
+    }
+
+    function initCharts() {
+      // Hourly trend
+      const tCtx = document.getElementById('trendChart')?.getContext('2d');
+      if (tCtx) new Chart(tCtx, {
+        type: 'line',
+        data: {
+          labels: ['7AM','8AM','9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM','6PM'],
+          datasets: [{ label: 'Votes (Millions)', data: [2,8,18,31,42,52,59,65,72,80,88,94], borderColor: '#fb923c', backgroundColor: 'rgba(251,146,60,0.1)', fill: true, tension: 0.4, pointRadius: 3 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#ffffff80', font: { size: 10 } }, grid: { color: '#ffffff10' } }, y: { ticks: { color: '#ffffff80', font: { size: 10 } }, grid: { color: '#ffffff10' } } } }
+      });
+      // Urban vs Rural donut
+      const sCtx = document.getElementById('splitChart')?.getContext('2d');
+      if (sCtx) new Chart(sCtx, {
+        type: 'doughnut',
+        data: { labels: ['Urban','Rural','Semi-Urban'], datasets: [{ data: [38, 49, 13], backgroundColor: ['#fb923c','#22c55e','#8b5cf6'], borderWidth: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#ffffff80', font: { size: 11 } } } } }
+      });
+    }
+
+    // ── Constituency Tracker ───────────────────────────────────────
+    function renderConstituencies(filter = '') {
+      const list = document.getElementById('conList');
+      if (!list) return;
+      const state = document.getElementById('stateFilter')?.value || 'all';
+      const data = MOCK.constituencies.filter(c =>
+        (state === 'all' || c.state === state) &&
+        c.name.toLowerCase().includes(filter.toLowerCase())
+      );
+      list.innerHTML = data.length ? data.map(c => `
+        <div class="glass-card rounded-xl p-3 flex items-center gap-3">
+          <div class="flex-1">
+            <div class="font-semibold text-sm">${c.name}</div>
+            <div class="text-xs text-white/50">${c.state}</div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full" style="background:${c.color}30;color:${c.color}">${c.party}</span>
+            <div class="text-xs text-white/50 mt-1">Margin: ${c.margin.toLocaleString()}</div>
+          </div>
+          <div class="w-20">
+            <div class="con-bar" style="width:${c.pct}%;background:${c.color}"></div>
+            <div class="text-xs text-center text-white/50 mt-1">${c.pct}%</div>
+          </div>
+        </div>`).join('') : '<p class="text-white/40 text-center py-8">No constituencies found</p>';
+    }
+    document.getElementById('conSearch')?.addEventListener('input', e => renderConstituencies(e.target.value));
+    document.getElementById('stateFilter')?.addEventListener('change', () => renderConstituencies(document.getElementById('conSearch')?.value || ''));
+
+    // ── News Feed ──────────────────────────────────────────────────
+    function renderNews(filter = 'all') {
+      const feed = document.getElementById('newsFeed');
+      if (!feed) return;
+      const items = filter === 'all' ? MOCK.news : MOCK.news.filter(n => n.cat === filter);
+      feed.innerHTML = items.map(n => `
+        <div class="glass-card rounded-xl p-4 hover:bg-white/10 transition">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full ${n.v ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}">${n.v ? '✓ Verified' : '⚠ Unverified'}</span>
+            <span class="text-xs text-white/40">${n.src}</span>
+            <span class="text-xs text-white/40 ml-auto">${n.t}</span>
+          </div>
+          <p class="text-sm font-medium leading-snug mb-2">${n.h}</p>
+          ${n.fc !== null ? `<span class="text-xs text-red-300">Truth Score: ${n.fc}/100 — <button class="underline" onclick="document.querySelector('[data-feature=\'myth-buster\']').click()">Fact-Check It</button></span>` : ''}
+        </div>`).join('');
+    }
+    document.querySelectorAll('.news-filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.news-filter').forEach(b => { b.classList.remove('active','bg-orange-500/30','border-orange-400/40'); b.classList.add('bg-white/10','border-white/20'); });
+        btn.classList.add('active','bg-orange-500/30','border-orange-400/40'); btn.classList.remove('bg-white/10','border-white/20');
+        renderNews(btn.dataset.filter);
+      });
+    });
+
+    // ── Participation Leaderboard ──────────────────────────────────
+    function initParticipation() {
+      const top = document.getElementById('topStates');
+      if (top) top.innerHTML = MOCK.states.map((s, i) => `
+        <div class="flex items-center gap-3">
+          <span class="text-lg">${['🥇','🥈','🥉','4️⃣','5️⃣'][i]}</span>
+          <span class="text-lg">${s.flag}</span>
+          <div class="flex-1">
+            <div class="flex justify-between text-sm mb-1"><span>${s.name}</span><span class="font-bold text-green-300">${s.pct}%</span></div>
+            <div class="bg-white/10 rounded-full h-1.5"><div class="con-bar bg-gradient-to-r from-green-400 to-green-600" style="width:${s.pct}%"></div></div>
+          </div>
+        </div>`).join('');
+      if (i === 0 && typeof confetti !== 'undefined') { try { confetti({ particleCount:60, spread:70, origin:{y:0.4} }); } catch(e){} }
+      // Comparison chart
+      const cCtx = document.getElementById('compareChart')?.getContext('2d');
+      if (cCtx) new Chart(cCtx, {
+        type: 'bar',
+        data: {
+          labels: MOCK.states.map(s => s.name),
+          datasets: [
+            { label: '2024', data: MOCK.states.map(s => s.pct), backgroundColor: '#fb923c' },
+            { label: '2019', data: MOCK.states.map(s => s.prev), backgroundColor: '#3b82f6' }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#ffffff80', font: { size: 10 } } } }, scales: { x: { ticks: { color: '#ffffff80', font: { size: 9 } }, grid: { color: '#ffffff10' } }, y: { ticks: { color: '#ffffff80', font: { size: 10 } }, grid: { color: '#ffffff10' }, min: 70 } } }
+      });
+    }
+
+    // ── EVM Simulator ─────────────────────────────────────────────
+    function initEVM() {
+      const container = document.getElementById('evmCandidates');
+      if (!container) return;
+      container.innerHTML = MOCK.evmCandidates.map((c, i) => `
+        <button class="evm-btn w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-left text-sm" style="border-color:${c.color}40;background:${c.color}10" onclick="castVote(${i})">
+          <span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold border-2" style="border-color:${c.color};color:${c.color}">${i+1}</span>
+          <span>${c.symbol} ${c.name}</span>
+        </button>`).join('');
+    }
+
+    window.castVote = function(i) {
+      const c = MOCK.evmCandidates[i];
+      const slip = document.getElementById('vvpatSlip');
+      const content = document.getElementById('vvpatContent');
+      const step = document.getElementById('evmStep');
+      if (!slip || !content || !step) return;
+      content.innerHTML = `<div><strong>Candidate:</strong> ${c.name}</div><div><strong>Party:</strong> ${c.party}</div><div><strong>Symbol:</strong> ${c.symbol}</div>`;
+      slip.classList.remove('hidden');
+      step.innerHTML = '<div class="text-4xl mb-2">✅</div><p class="text-sm text-green-300 font-semibold">Vote Cast Successfully! VVPAT slip visible for 7 seconds.</p>';
+      if (c.name !== 'NOTA' && typeof confetti !== 'undefined') { try { confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } }); } catch(e){} }
+      document.querySelectorAll('.evm-btn').forEach(b => b.disabled = true);
+      setTimeout(() => { slip.classList.add('hidden'); }, 7000);
+    };
+
+    window.resetEVM = function() {
+      document.getElementById('vvpatSlip')?.classList.add('hidden');
+      const step = document.getElementById('evmStep');
+      if (step) step.innerHTML = '<div class="text-4xl mb-2">👆</div><p class="text-sm text-white/80">Press any candidate button on the EVM to cast your vote</p>';
+      document.querySelectorAll('.evm-btn').forEach(b => b.disabled = false);
+    };
+
+    // ── FAQ Accordion ──────────────────────────────────────────────
+    function renderFAQ(filter = 'all', search = '') {
+      const list = document.getElementById('faqList');
+      if (!list) return;
+      const data = MOCK.faqs.filter(f =>
+        (filter === 'all' || f.cat === filter) &&
+        (f.q.toLowerCase().includes(search.toLowerCase()) || f.a.toLowerCase().includes(search.toLowerCase()))
+      );
+      list.innerHTML = data.length ? data.map((f, i) => `
+        <div class="glass-card rounded-xl overflow-hidden">
+          <button class="w-full text-left px-4 py-3 flex items-center justify-between gap-3 hover:bg-white/5 transition" onclick="toggleFAQ('faq${i}')" aria-expanded="false">
+            <span class="text-sm font-medium">${f.q}</span>
+            <span class="text-white/40 text-xs shrink-0">${f.views.toLocaleString()} asked ▾</span>
+          </button>
+          <div id="faq${i}" class="faq-answer px-4">
+            <p class="text-sm text-white/80 pb-4 leading-relaxed">${f.a}</p>
+            <button class="mb-3 text-xs text-orange-300 underline" onclick="document.querySelector('[data-feature=\'explainer\']').click()">Ask AI for more detail →</button>
+          </div>
+        </div>`).join('') : '<p class="text-white/40 text-center py-8">No FAQs found. <button class="text-orange-300 underline" onclick="document.querySelector(\"[data-feature=\'explainer\']\").click()">Ask AI instead</button></p>';
+    }
+
+    window.toggleFAQ = function(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('open');
+    };
+
+    document.getElementById('faqSearch')?.addEventListener('input', e => {
+      const cat = document.querySelector('.faq-cat.active')?.dataset.cat || 'all';
+      renderFAQ(cat, e.target.value);
+    });
+    document.querySelectorAll('.faq-cat').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.faq-cat').forEach(b => { b.classList.remove('active','bg-orange-500/30','border-orange-400/40'); b.classList.add('bg-white/10','border-white/20'); });
+        btn.classList.add('active','bg-orange-500/30','border-orange-400/40'); btn.classList.remove('bg-white/10','border-white/20');
+        renderFAQ(btn.dataset.cat, document.getElementById('faqSearch')?.value || '');
+      });
+    });
+
+    // ── Init All ───────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      initDashboard();
+      renderConstituencies();
+      renderNews();
+      initParticipation();
+      initEVM();
+      renderFAQ();
+      // Pad main for sticky nav
+      document.querySelector('main')?.style.setProperty('padding-top', '72px');
+    });
+
+  })();
+  </script>
+
+  <!-- ============ HEATMAP & BOOTH INTELLIGENCE JS ============ -->
+  <script>
+  (function() {
+    'use strict';
+
+    // ── Mock Booth & State Data (demo purposes) ────────────────────
+    const BOOTH_DATA = {
+      booths: [
+        { id:101, name:'Rajiv Gandhi School', constituency:'Mumbai North', queue:8,  wait:'3-5 min',  crowd:'low',    qPct:16,
+          access:{wheelchair:true,braille:true,senior:true,volunteer:true},
+          hours:[{t:'7-9 AM',pct:35,lbl:'Low',col:'#22c55e'},{t:'9-12 PM',pct:80,lbl:'Peak',col:'#ef4444'},{t:'12-3 PM',pct:55,lbl:'Medium',col:'#f97316'},{t:'3-6 PM',pct:28,lbl:'Low',col:'#22c55e'}] },
+        { id:102, name:'Gandhi Community Hall', constituency:'Mumbai South', queue:45, wait:'18-22 min', crowd:'high',   qPct:90,
+          access:{wheelchair:true,braille:false,senior:true,volunteer:false},
+          hours:[{t:'7-9 AM',pct:60,lbl:'Medium',col:'#f97316'},{t:'9-12 PM',pct:95,lbl:'Peak',col:'#ef4444'},{t:'12-3 PM',pct:75,lbl:'High',col:'#ef4444'},{t:'3-6 PM',pct:40,lbl:'Low',col:'#22c55e'}] },
+        { id:103, name:'Nehru Primary School', constituency:'Delhi Central', queue:22, wait:'8-12 min', crowd:'medium', qPct:44,
+          access:{wheelchair:false,braille:true,senior:true,volunteer:true},
+          hours:[{t:'7-9 AM',pct:45,lbl:'Low',col:'#22c55e'},{t:'9-12 PM',pct:88,lbl:'Peak',col:'#ef4444'},{t:'12-3 PM',pct:60,lbl:'Medium',col:'#f97316'},{t:'3-6 PM',pct:35,lbl:'Low',col:'#22c55e'}] },
+        { id:104, name:'Ambedkar Public Hall',  constituency:'Bangalore South', queue:5, wait:'2-3 min', crowd:'low', qPct:10,
+          access:{wheelchair:true,braille:true,senior:true,volunteer:true},
+          hours:[{t:'7-9 AM',pct:30,lbl:'Low',col:'#22c55e'},{t:'9-12 PM',pct:70,lbl:'High',col:'#ef4444'},{t:'12-3 PM',pct:50,lbl:'Medium',col:'#f97316'},{t:'3-6 PM',pct:25,lbl:'Low',col:'#22c55e'}] },
+        { id:105, name:'Shivaji Municipal School', constituency:'Pune', queue:30, wait:'12-15 min', crowd:'medium', qPct:60,
+          access:{wheelchair:true,braille:false,senior:false,volunteer:true},
+          hours:[{t:'7-9 AM',pct:50,lbl:'Medium',col:'#f97316'},{t:'9-12 PM',pct:90,lbl:'Peak',col:'#ef4444'},{t:'12-3 PM',pct:65,lbl:'Medium',col:'#f97316'},{t:'3-6 PM',pct:38,lbl:'Low',col:'#22c55e'}] },
+        { id:106, name:'Tagore Vidyalaya',        constituency:'Kolkata North', queue:12, wait:'5-8 min', crowd:'low', qPct:24,
+          access:{wheelchair:false,braille:false,senior:true,volunteer:true},
+          hours:[{t:'7-9 AM',pct:40,lbl:'Low',col:'#22c55e'},{t:'9-12 PM',pct:82,lbl:'Peak',col:'#ef4444'},{t:'12-3 PM',pct:58,lbl:'Medium',col:'#f97316'},{t:'3-6 PM',pct:33,lbl:'Low',col:'#22c55e'}] },
+      ],
+      // State bubbles: [name, cx, cy, density, turnout]
+      states: [
+        ['J&K',     200, 50,  'low',    62.1, '#22c55e'],
+        ['Punjab',  175, 95,  'medium', 71.3, '#f97316'],
+        ['HP',      230, 90,  'low',    69.8, '#22c55e'],
+        ['Uttarakhand',265,115,'medium',64.4,'#f97316'],
+        ['Delhi',   230,155,  'high',   60.2, '#ef4444'],
+        ['UP',      280,175,  'high',   59.3, '#ef4444'],
+        ['Bihar',   330,190,  'high',   55.7, '#ef4444'],
+        ['WB',      370,200,  'medium', 80.4, '#f97316'],
+        ['Rajasthan',195,195, 'medium', 67.8, '#f97316'],
+        ['MP',      245,235,  'medium', 72.1, '#f97316'],
+        ['Jharkhand',330,240, 'low',    66.3, '#22c55e'],
+        ['Odisha',  350,270,  'low',    74.1, '#22c55e'],
+        ['Gujarat', 175,255,  'medium', 65.8, '#f97316'],
+        ['Maharashtra',215,290,'high',  72.3, '#ef4444'],
+        ['Chhattisgarh',285,275,'low',  70.5,'#22c55e'],
+        ['Telangana',270,320,  'medium',68.1, '#f97316'],
+        ['AP',      295,355,  'medium', 79.7, '#f97316'],
+        ['Karnataka',245,355, 'high',   73.2, '#ef4444'],
+        ['Tamil Nadu',275,405,'medium', 72.8, '#f97316'],
+        ['Kerala',  240,415,  'low',    77.6, '#22c55e'],
+        ['NE',      410,170,  'low',    85.2, '#22c55e'],
+      ]
+    };
+
+    const ACCESS_LABELS = {
+      wheelchair: 'Wheelchair ramp',
+      braille:    'Braille guide',
+      senior:     'Senior priority lane',
+      volunteer:  'Volunteer assistance'
+    };
+
+    // ── Render SVG Bubble Map ──────────────────────────────────────
+    function renderBubbleMap() {
+      const g = document.getElementById('stateBubbles');
+      const tooltip = document.getElementById('mapTooltip');
+      const ttBg = document.getElementById('ttBg');
+      const ttName = document.getElementById('ttName');
+      const ttVal  = document.getElementById('ttVal');
+      if (!g) return;
+
+      BOOTH_DATA.states.forEach(([name, cx, cy, density, turnout, color], i) => {
+        const r = density === 'high' ? 22 : density === 'medium' ? 17 : 13;
+        // Outer pulse ring
+        const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', r + 8);
+        ring.setAttribute('fill', 'none'); ring.setAttribute('stroke', color);
+        ring.setAttribute('stroke-width', '1'); ring.setAttribute('opacity', '0.3');
+        ring.style.animation = `pulse-dot ${2 + (i % 3) * 0.5}s ease infinite`;
+        g.appendChild(ring);
+
+        // Main bubble
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', r);
+        circle.setAttribute('fill', color); circle.setAttribute('fill-opacity', '0.75');
+        circle.setAttribute('filter', 'url(#glow)');
+        circle.style.cursor = 'pointer';
+        circle.style.transition = 'r 0.2s ease, fill-opacity 0.2s ease';
+
+        // Label
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', cx); label.setAttribute('y', cy + 4);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', r > 17 ? '8' : '7');
+        label.setAttribute('fill', 'white'); label.setAttribute('font-family', 'Inter,sans-serif');
+        label.setAttribute('font-weight', 'bold'); label.setAttribute('pointer-events', 'none');
+        label.textContent = name.length > 6 ? name.slice(0,5) + '…' : name;
+
+        // Hover events
+        circle.addEventListener('mouseenter', (e) => {
+          circle.setAttribute('fill-opacity', '1');
+          circle.setAttribute('r', r + 3);
+          // Position tooltip
+          const px = Math.min(cx + 14, 430), py = Math.max(cy - 36, 10);
+          ttBg.setAttribute('x', px - 4); ttBg.setAttribute('y', py - 14);
+          ttBg.setAttribute('width', '130'); ttBg.setAttribute('height', '34');
+          ttName.setAttribute('x', px); ttName.setAttribute('y', py);
+          ttName.textContent = name;
+          ttVal.setAttribute('x', px); ttVal.setAttribute('y', py + 14);
+          ttVal.textContent = `Turnout: ${turnout}% · ${density.charAt(0).toUpperCase() + density.slice(1)} crowd`;
+          tooltip.style.display = 'block';
+        });
+        circle.addEventListener('mouseleave', () => {
+          circle.setAttribute('fill-opacity', '0.75');
+          circle.setAttribute('r', r);
+          tooltip.style.display = 'none';
+        });
+        circle.addEventListener('click', () => {
+          // Show related booths for this state
+          showToast(`Showing booths for ${name}`, '📍');
+        });
+
+        g.appendChild(ring);
+        g.appendChild(circle);
+        g.appendChild(label);
+      });
+
+      // Bring tooltip to front
+      const svg = document.getElementById('indiaBubbleMap');
+      if (svg && tooltip) svg.appendChild(tooltip);
+    }
+
+    // ── Render Hourly Bars ─────────────────────────────────────────
+    function renderHourlyBars(booth) {
+      const container = document.getElementById('hourlyBars');
+      const hint = document.getElementById('bestTimeHint');
+      if (!container) return;
+      const best = booth.hours.reduce((a, b) => a.pct < b.pct ? a : b);
+      container.innerHTML = booth.hours.map(h => `
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-white/70 w-16 shrink-0">${h.t}</span>
+          <div class="flex-1 bg-white/10 rounded-full h-6 overflow-hidden">
+            <div class="h-6 flex items-center justify-center text-xs font-semibold text-white transition-all duration-1000 rounded-full"
+                 style="width:${h.pct}%;background:${h.col}">
+              ${h.lbl}
+            </div>
+          </div>
+          <span class="text-xs text-white/50 w-8 text-right">${h.pct}%</span>
+        </div>`).join('');
+      if (hint) hint.textContent = `Best: ${best.t} — only ~${best.pct}% crowd expected`;
+    }
+
+    // ── Render Accessibility ───────────────────────────────────────
+    function renderAccessibility(booth) {
+      const el = document.getElementById('accessibilityList');
+      if (!el) return;
+      el.innerHTML = Object.entries(ACCESS_LABELS).map(([key, label]) => `
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="${booth.access[key] ? 'check-circle' : 'x-circle'}"
+             class="w-4 h-4 shrink-0 ${booth.access[key] ? 'text-green-400' : 'text-white/30'}"></i>
+          <span class="${booth.access[key] ? 'text-white/80' : 'text-white/30'}">${label}</span>
+        </div>`).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ── Render Nearby Booths ───────────────────────────────────────
+    function renderNearby(current) {
+      const panel = document.getElementById('nearbyBooths');
+      const list  = document.getElementById('nearbyList');
+      if (!panel || !list) return;
+      const others = BOOTH_DATA.booths.filter(b => b.id !== current.id).slice(0, 3);
+      const colors = { low:'bg-green-500/20 text-green-300', medium:'bg-orange-500/20 text-orange-300', high:'bg-red-500/20 text-red-300' };
+      list.innerHTML = others.map(b => `
+        <div class="glass-card rounded-xl p-3 cursor-pointer hover:bg-white/10 transition" onclick="selectBooth(${b.id})">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-sm font-semibold">#${b.id}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full font-bold ${colors[b.crowd]}">${b.crowd}</span>
+          </div>
+          <p class="text-xs text-white/80">${b.name}</p>
+          <p class="text-xs text-white/50 mt-0.5">${b.constituency}</p>
+          <p class="text-xs text-white/60 mt-1">Wait: ${b.wait}</p>
+        </div>`).join('');
+      panel.classList.remove('hidden');
+    }
+
+    // ── Show Booth Details ─────────────────────────────────────────
+    function showBoothDetails(booth) {
+      document.getElementById('boothDetails')?.classList.remove('hidden');
+      document.getElementById('boothName').textContent        = `Booth #${booth.id} — ${booth.name}`;
+      document.getElementById('boothConstituency').textContent = `Constituency: ${booth.constituency}`;
+      document.getElementById('boothQueue').textContent        = `~${booth.queue} people`;
+      document.getElementById('boothWait').textContent         = booth.wait;
+      // Queue bar + badge
+      const bar   = document.getElementById('boothQueueBar');
+      const badge = document.getElementById('boothCrowdBadge');
+      const colMap = { low:'#22c55e', medium:'#f97316', high:'#ef4444' };
+      const bgMap  = { low:'bg-green-500/20 text-green-300', medium:'bg-orange-500/20 text-orange-300', high:'bg-red-500/20 text-red-300' };
+      if (bar)   { bar.style.width = booth.qPct + '%'; bar.style.background = colMap[booth.crowd]; }
+      if (badge) { badge.className = `px-2 py-0.5 rounded-full text-xs font-bold ${bgMap[booth.crowd]}`; badge.textContent = booth.crowd.charAt(0).toUpperCase() + booth.crowd.slice(1); }
+      renderHourlyBars(booth);
+      renderAccessibility(booth);
+      renderNearby(booth);
+      // Scroll booth details into view
+      document.getElementById('boothDetails')?.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    // Allow external selection (from Nearby cards)
+    window.selectBooth = function(id) {
+      const booth = BOOTH_DATA.booths.find(b => b.id === id);
+      if (booth) showBoothDetails(booth);
+    };
+
+    // ── Booth Search Autocomplete ──────────────────────────────────
+    function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+    function initBoothSearch() {
+      const input   = document.getElementById('boothSearch');
+      const sugBox  = document.getElementById('boothSuggestions');
+      const btn     = document.getElementById('boothSearchBtn');
+      if (!input || !sugBox) return;
+
+      const doSearch = (q) => {
+        const query = q.trim().toLowerCase();
+        if (query.length < 2) { sugBox.classList.add('hidden'); return; }
+        const results = BOOTH_DATA.booths.filter(b =>
+          b.name.toLowerCase().includes(query) ||
+          b.constituency.toLowerCase().includes(query) ||
+          String(b.id).includes(query)
+        );
+        if (!results.length) { sugBox.classList.add('hidden'); return; }
+        sugBox.innerHTML = results.map(b => `
+          <button class="w-full text-left px-4 py-2 hover:bg-white/10 transition flex justify-between items-center border-b border-white/5 last:border-0"
+                  onclick="selectBoothFromSearch(${b.id})">
+            <span>#${b.id} ${b.name} <span class="text-white/50 text-xs">(${b.constituency})</span></span>
+            <span class="text-xs ${b.crowd === 'low' ? 'text-green-300' : b.crowd === 'medium' ? 'text-orange-300' : 'text-red-300'}">${b.crowd}</span>
+          </button>`).join('');
+        sugBox.classList.remove('hidden');
+      };
+
+      input.addEventListener('input', debounce((e) => doSearch(e.target.value), 250));
+      btn.addEventListener('click', () => doSearch(input.value));
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(input.value); });
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !sugBox.contains(e.target)) sugBox.classList.add('hidden');
+      });
+    }
+
+    window.selectBoothFromSearch = function(id) {
+      const booth = BOOTH_DATA.booths.find(b => b.id === id);
+      if (!booth) return;
+      document.getElementById('boothSearch').value = `#${booth.id} ${booth.name}`;
+      document.getElementById('boothSuggestions')?.classList.add('hidden');
+      showBoothDetails(booth);
+      showToast(`Booth #${booth.id} loaded`, '📍');
+    };
+
+    // ── Simulated Live Queue Ticker ────────────────────────────────
+    function startLiveTicker() {
+      setInterval(() => {
+        // Randomly nudge queue numbers up/down slightly for demo realism
+        BOOTH_DATA.booths.forEach(b => {
+          b.queue = Math.max(2, b.queue + (Math.random() > 0.5 ? 1 : -1));
+          b.qPct  = Math.min(100, Math.max(5, b.qPct + (Math.random() > 0.5 ? 2 : -2)));
+        });
+        // Refresh displayed booth if visible
+        const name = document.getElementById('boothName')?.textContent;
+        if (name && !name.includes('—')) {
+          const id = parseInt(name.match(/#(\d+)/)?.[1]);
+          const b = BOOTH_DATA.booths.find(x => x.id === id);
+          if (b) {
+            document.getElementById('boothQueue').textContent = `~${b.queue} people`;
+            const bar = document.getElementById('boothQueueBar');
+            if (bar) bar.style.width = b.qPct + '%';
+          }
+        }
+      }, 4000);
+    }
+
+    // ── Default state: show first booth's timing bars ──────────────
+    function renderDefaultHourlyBars() {
+      renderHourlyBars(BOOTH_DATA.booths[0]);
+      renderAccessibility(BOOTH_DATA.booths[0]);
+    }
+
+    // ── Init ───────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBubbleMap();
+      renderDefaultHourlyBars();
+      initBoothSearch();
+      startLiveTicker();
+      if (window.lucide) lucide.createIcons();
+    });
+
+  })();
+  <!-- ============ ELECTION TIME MACHINE JS ============ -->
+  <script>
+  (function() {
+    'use strict';
+
+    const historicalData = {
+      1952: {
+        title: "1st Lok Sabha Elections",
+        totalSeats: 489,
+        turnout: 45.7,
+        eligibleVoters: "173 Million",
+        votesPolled: "79 Million",
+        winner: {party: "INC", name: "Indian National Congress", alliance: "Single Party", seats: 364, percentage: 74.4, badgeText: "INC", badgeStyle: "linear-gradient(135deg, #3b82f6, #1d4ed8)"},
+        parties: [
+          {name: "INC", seats: 364, color: "#3b82f6"},
+          {name: "CPI", seats: 16, color: "#ef4444"},
+          {name: "Others", seats: 109, color: "#9333ea"}
+        ]
+      },
+      1967: {
+        title: "4th Lok Sabha Elections",
+        totalSeats: 520,
+        turnout: 61.3,
+        eligibleVoters: "250 Million",
+        votesPolled: "153 Million",
+        winner: {party: "INC", name: "Indian National Congress", alliance: "Single Party", seats: 283, percentage: 54.4, badgeText: "INC", badgeStyle: "linear-gradient(135deg, #3b82f6, #1d4ed8)"},
+        parties: [
+          {name: "INC", seats: 283, color: "#3b82f6"},
+          {name: "SWA", seats: 44, color: "#eab308"},
+          {name: "Others", seats: 193, color: "#9333ea"}
+        ]
+      },
+      1980: {
+        title: "7th Lok Sabha Elections",
+        totalSeats: 529,
+        turnout: 56.9,
+        eligibleVoters: "362 Million",
+        votesPolled: "202 Million",
+        winner: {party: "INC(I)", name: "Indian National Congress (I)", alliance: "Single Party", seats: 353, percentage: 66.7, badgeText: "INC", badgeStyle: "linear-gradient(135deg, #3b82f6, #1d4ed8)"},
+        parties: [
+          {name: "INC(I)", seats: 353, color: "#3b82f6"},
+          {name: "JNP(S)", seats: 41, color: "#22c55e"},
+          {name: "Others", seats: 135, color: "#9333ea"}
+        ]
+      },
+      1998: {
+        title: "12th Lok Sabha Elections",
+        totalSeats: 543,
+        turnout: 61.9,
+        eligibleVoters: "605 Million",
+        votesPolled: "374 Million",
+        winner: {party: "BJP", name: "Bharatiya Janata Party", alliance: "NDA Alliance", seats: 182, percentage: 33.5, badgeText: "BJP", badgeStyle: "linear-gradient(135deg, #f97316, #ea580c)"},
+        parties: [
+          {name: "BJP", seats: 182, color: "#f97316"},
+          {name: "INC", seats: 141, color: "#3b82f6"},
+          {name: "Others", seats: 220, color: "#9333ea"}
+        ]
+      },
+      2014: {
+        title: "16th Lok Sabha Elections",
+        totalSeats: 543,
+        turnout: 66.4,
+        eligibleVoters: "814 Million",
+        votesPolled: "551 Million",
+        winner: {party: "BJP", name: "Bharatiya Janata Party", alliance: "NDA Alliance", seats: 282, percentage: 52.0, badgeText: "BJP", badgeStyle: "linear-gradient(135deg, #f97316, #ea580c)"},
+        parties: [
+          {name: "BJP", seats: 282, color: "#f97316"},
+          {name: "INC", seats: 44, color: "#3b82f6"},
+          {name: "Others", seats: 217, color: "#9333ea"}
+        ]
+      },
+      2019: {
+        title: "17th Lok Sabha Elections",
+        totalSeats: 543,
+        turnout: 67.11,
+        eligibleVoters: "900 Million",
+        votesPolled: "614 Million",
+        winner: {party: "BJP", name: "Bharatiya Janata Party", alliance: "NDA Alliance", seats: 303, percentage: 55.8, badgeText: "BJP", badgeStyle: "linear-gradient(135deg, #f97316, #ea580c)"},
+        parties: [
+          {name: "BJP", seats: 303, color: "#f97316"},
+          {name: "INC", seats: 52, color: "#3b82f6"},
+          {name: "Others", seats: 188, color: "#9333ea"}
+        ]
+      },
+      2024: {
+        title: "18th Lok Sabha Elections",
+        totalSeats: 543,
+        turnout: 67.40,
+        eligibleVoters: "968 Million",
+        votesPolled: "642 Million",
+        winner: {party: "BJP", name: "Bharatiya Janata Party", alliance: "NDA Alliance", seats: 303, percentage: 55.8, badgeText: "BJP", badgeStyle: "linear-gradient(135deg, #f97316, #ea580c)"},
+        parties: [
+          {name: "BJP", seats: 303, color: "#f97316"},
+          {name: "INC", seats: 99, color: "#3b82f6"},
+          {name: "Others", seats: 141, color: "#9333ea"}
+        ]
+      }
+    };
+
+    // Helper to find the closest available year
+    function getClosestYear(target) {
+      const years = Object.keys(historicalData).map(Number).sort((a, b) => a - b);
+      return years.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
+    }
+
+    const yearSlider = document.getElementById('yearSlider');
+    const selectedYearDisplay = document.getElementById('selectedYear');
+
+    if (yearSlider && selectedYearDisplay) {
+      yearSlider.addEventListener('input', (e) => {
+        const closestYear = getClosestYear(parseInt(e.target.value));
+        selectedYearDisplay.textContent = closestYear;
+        updateSingleView(closestYear);
+      });
+      
+      // Initialize with 2024
+      updateSingleView(2024);
+    }
+
+    function updateSingleView(year) {
+      const data = historicalData[year];
+      if (!data) return;
+      
+      const elTitle = document.getElementById('electionTitle');
+      const elTotalSeats = document.getElementById('totalSeats');
+      const elVoterTurnout = document.getElementById('voterTurnout');
+      const elEligibleVoters = document.getElementById('eligibleVoters');
+      const elVotesPolled = document.getElementById('votesPolled');
+      const elWinnerName = document.getElementById('winnerName');
+      const elWinnerAlliance = document.getElementById('winnerAlliance');
+      const elWinnerBadge = document.getElementById('winnerBadge');
+      const seatDistContainer = document.getElementById('seatDistribution');
+      
+      if (elTitle) elTitle.textContent = data.title;
+      if (elTotalSeats) elTotalSeats.textContent = data.totalSeats;
+      if (elVoterTurnout) elVoterTurnout.textContent = data.turnout + '%';
+      if (elEligibleVoters) elEligibleVoters.textContent = data.eligibleVoters;
+      if (elVotesPolled) elVotesPolled.textContent = data.votesPolled;
+      
+      if (elWinnerName) elWinnerName.textContent = data.winner.name;
+      if (elWinnerAlliance) elWinnerAlliance.textContent = data.winner.alliance;
+      if (elWinnerBadge) {
+        elWinnerBadge.textContent = data.winner.badgeText;
+        elWinnerBadge.style.background = data.winner.badgeStyle;
+      }
+      
+      // Update seat distribution
+      if (seatDistContainer && data.parties) {
+        seatDistContainer.innerHTML = data.parties.map(party => `
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold">${party.name}</span>
+              <span class="font-bold">${party.seats} seats</span>
+            </div>
+            <div class="bg-white/20 rounded-full h-6 overflow-hidden">
+              <div class="h-6 flex items-center px-3 text-xs font-semibold" 
+                   style="width: ${(party.seats/data.totalSeats*100).toFixed(1)}%; background: ${party.color}">
+                ${(party.seats/data.totalSeats*100).toFixed(1)}%
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // View toggles
+    const singleViewBtn = document.getElementById('singleViewBtn');
+    const compareViewBtn = document.getElementById('compareViewBtn');
+    const singleView = document.getElementById('singleView');
+    const compareView = document.getElementById('compareView');
+
+    if (singleViewBtn && compareViewBtn && singleView && compareView) {
+      singleViewBtn.addEventListener('click', () => {
+        singleView.classList.remove('hidden');
+        singleView.classList.add('block');
+        compareView.classList.add('hidden');
+        compareView.classList.remove('block');
+        
+        singleViewBtn.classList.add('bg-gradient-to-r', 'from-orange-500', 'to-green-500', 'border-transparent');
+        singleViewBtn.classList.remove('bg-white/10', 'border', 'border-white/20');
+        
+        compareViewBtn.classList.remove('bg-gradient-to-r', 'from-orange-500', 'to-green-500', 'border-transparent');
+        compareViewBtn.classList.add('bg-white/10', 'border', 'border-white/20');
+      });
+
+      compareViewBtn.addEventListener('click', () => {
+        singleView.classList.add('hidden');
+        singleView.classList.remove('block');
+        compareView.classList.remove('hidden');
+        compareView.classList.add('block');
+        
+        compareViewBtn.classList.add('bg-gradient-to-r', 'from-orange-500', 'to-green-500', 'border-transparent');
+        compareViewBtn.classList.remove('bg-white/10', 'border', 'border-white/20');
+        
+        singleViewBtn.classList.remove('bg-gradient-to-r', 'from-orange-500', 'to-green-500', 'border-transparent');
+        singleViewBtn.classList.add('bg-white/10', 'border', 'border-white/20');
+      });
+    }
+
+  })();
+  </script>
+</body>
+</html>

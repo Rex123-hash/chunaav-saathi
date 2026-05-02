@@ -1,0 +1,49 @@
+# Git
+.git/
+.gitignore
+
+# Docs / meta
+README.md
+CHANGELOG.md
+LICENSE
+*.md
+
+# Dependencies (rebuilt inside Docker)
+node_modules/
+
+# Environment secrets
+.env
+.env.*
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Tests (not needed in production image)
+tests/
+coverage/
+
+# Build artifacts
+dist/
+build/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# CI / deployment configs (not needed at runtime)
+cloudbuild.yaml
+app.yaml
+Dockerfile
+.dockerignore
