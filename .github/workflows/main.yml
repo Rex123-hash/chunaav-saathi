@@ -113,7 +113,7 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: npm run test:unit -- --reporter=spec
+        run: npm run test:unit
 
       - name: Upload test results
         if: always()
@@ -155,7 +155,7 @@ jobs:
           firebase emulators:exec \
             --only firestore \
             --project chunav-saathi-test \
-            "npm run test:integration -- --reporter=spec"
+            "npm run test:integration"
 
   # ── Job 5: Build Validation ──────────────────────────────────────────────────
   build:
