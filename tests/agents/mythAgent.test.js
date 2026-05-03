@@ -290,10 +290,10 @@ describe('MythAgent - Core Functionality', () => {
 
   // ── Test 11: healthCheck() ────────────────────────────────────────────────
 
-  it('healthCheck() should report configured:true when GEMINI_API_KEY is set', () => {
+  it('healthCheck() should report configured:true when GCLOUD_PROJECT is set', () => {
     const status = mythAgent.healthCheck();
     assert.strictEqual(status.configured, true);
-    assert.strictEqual(status.model, 'gemini-2.0-flash-lite');
+    assert.strictEqual(status.model, 'gemini-2.5-flash');
   });
 
   // ── Test 12: _parseResponse handles markdown-fenced JSON ─────────────────

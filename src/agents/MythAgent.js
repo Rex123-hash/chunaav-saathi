@@ -124,7 +124,8 @@ const GENERATION_CONFIG = {
 
 class MythAgent {
   constructor() {
-    this._ai = null;
+    this._ai    = null;
+    this._model = null; // injectable mock for tests
   }
 
   // ── Internal Init ───────────────────────────────────────────────────────────
@@ -283,7 +284,8 @@ class MythAgent {
       return cached.fact_check_result;
     }
 
-    this._ensureClient();
+    // Ensure client only when no mock model is injected (tests inject _model directly)
+    if (!this._model) this._ensureClient();
 
     const langGuide = {
       hi:      'Respond in Hindi (Devanagari). Use English election terms only when unavoidable.',
@@ -310,43 +312,55 @@ class MythAgent {
     let lastError;
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
-        // Agentic loop: handle multi-turn function calling via chat
-        const chat = this._ai.chats.create({
-          model:  MODEL_NAME,
-          config: {
-            systemInstruction: SYSTEM_INSTRUCTION,
-            tools:             MCP_TOOLS,
-            safetySettings:    SAFETY_SETTINGS,
-            ...GENERATION_CONFIG,
-          },
-        });
+        let text, finishReason;
 
-        let result   = await chat.sendMessage({ message: prompt });
-        let response = result;
+        if (this._model) {
+          // ── Test/mock path: injected model uses old @google/generative-ai API ──
+          const chat = this._model.startChat();
+          let result   = await chat.sendMessage(prompt);
+          let response = result.response;
 
-        // MCP tool loop — Gemini may call tools multiple times
-        while (response.functionCalls?.length) {
-          const toolResults = await this._dispatchTools(response.functionCalls);
-          // Send tool results back as function responses
-          const parts = toolResults.map(t => ({ functionResponse: t.functionResponse }));
-          result   = await chat.sendMessage({ message: parts });
-          response = result;
+          while (response.functionCalls?.()?.length) {
+            const toolResults = await this._dispatchTools(response.functionCalls());
+            result   = await chat.sendMessage(toolResults);
+            response = result.response;
+          }
+          finishReason = response.candidates?.[0]?.finishReason;
+          text         = response.text();
+        } else {
+          // ── Production path: Vertex AI via @google/genai ──────────────────────
+          const chat = this._ai.chats.create({
+            model:  MODEL_NAME,
+            config: {
+              systemInstruction: SYSTEM_INSTRUCTION,
+              tools:             MCP_TOOLS,
+              safetySettings:    SAFETY_SETTINGS,
+              ...GENERATION_CONFIG,
+            },
+          });
+
+          let response = await chat.sendMessage({ message: prompt });
+
+          while (response.functionCalls?.length) {
+            const toolResults = await this._dispatchTools(response.functionCalls);
+            const parts = toolResults.map(t => ({ functionResponse: t.functionResponse }));
+            response = await chat.sendMessage({ message: parts });
+          }
+          finishReason = response.candidates?.[0]?.finishReason;
+          text         = response.text;
         }
 
         // Check for safety blocks
-        const finishReason = response.candidates?.[0]?.finishReason;
         if (finishReason === 'SAFETY') return this._safetyWarningResponse();
 
-        const text   = response.text;
         const parsed = this._parseResponse(text);
-
         if (!parsed) throw new Error(`[MythAgent] Invalid JSON from model: ${text.slice(0, 100)}`);
 
         // Persist result to Firestore truth table (fire & forget)
         const mythId = crypto.createHash('sha256').update(mythText.trim().toLowerCase()).digest('hex').slice(0, 32);
         firestoreService.updateTruthTable(mythId, {
           fact_check_result: parsed,
-          verified_by:       'gemini-2.0-flash-lite',
+          verified_by:       MODEL_NAME,
         }).catch(e => console.error('[MythAgent] Failed to cache to truth table:', e.message));
 
         return parsed;
