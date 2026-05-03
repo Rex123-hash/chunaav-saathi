@@ -8,7 +8,15 @@ const jwt              = require('jsonwebtoken');
 const CLIENT_ID     = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI  = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/v1/auth/google/callback';
-const JWT_SECRET    = process.env.JWT_SECRET          || 'chunav-saathi-dev-secret-change-in-prod';
+
+// In production, JWT_SECRET MUST be set via environment variable.
+// A weak fallback is only allowed in development/test environments.
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('[AuthService] JWT_SECRET environment variable is required in production');
+  }
+  return 'chunav-saathi-dev-secret-change-in-prod'; // dev only
+})();
 const JWT_EXPIRES   = '7d';
 
 // ─── OAuth2 Client ────────────────────────────────────────────────────────────
