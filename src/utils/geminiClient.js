@@ -1,15 +1,14 @@
 'use strict';
 
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 
 // ─── Default Safety Settings ──────────────────────────────────────────────────
 
-/** @type {import('@google-cloud/generative-ai').SafetySetting[]} */
 const DEFAULT_SAFETY = [
-  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_HARASSMENT,        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+  { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
 ];
 
 // ─── LRU Cache (shared across agents) ────────────────────────────────────────
@@ -48,40 +47,42 @@ class TTLCache {
 
 // ─── GeminiClient ─────────────────────────────────────────────────────────────
 
+const DEFAULT_MODEL = 'gemini-2.5-flash';
+
 /**
  * @typedef {Object} ModelOptions
- * @property {string}  model             - e.g. 'gemini-2.0-flash-lite'
- * @property {string}  systemInstruction - System prompt
+ * @property {string}  model             - e.g. 'gemini-2.5-flash'
+ * @property {string}  systemInstruction - System prompt text
  * @property {number}  [temperature]     - Default 0.4
  * @property {number}  [maxOutputTokens] - Default 2048
  * @property {number}  [topK]            - Default 20
  * @property {number}  [topP]            - Default 0.8
- * @property {import('@google-cloud/generative-ai').Tool[]} [tools]
+ * @property {any[]}   [tools]           - Function declarations
  */
 
 class GeminiClient {
   constructor() {
-    this._genAI  = null;
-    this._cache  = new TTLCache();
+    this._ai    = null;
+    this._cache = new TTLCache();
   }
 
-  /** @private */
+  /** @private — lazy-init the SDK using Vertex AI + ADC */
   _sdk() {
-    if (this._genAI) return this._genAI;
-    const key = process.env.GEMINI_API_KEY;
-    if (!key) throw new Error('[GeminiClient] GEMINI_API_KEY is not set');
-    this._genAI = new GoogleGenerativeAI(key);
-    return this._genAI;
+    if (this._ai) return this._ai;
+    const project  = process.env.GCLOUD_PROJECT;
+    const location = process.env.GCLOUD_LOCATION || 'us-central1';
+    if (!project) throw new Error('[GeminiClient] GCLOUD_PROJECT is not set');
+    this._ai = new GoogleGenAI({ vertexai: true, project, location });
+    return this._ai;
   }
 
   /**
-   * Returns a configured GenerativeModel instance.
+   * Returns a config object used for generate calls.
    * @param {ModelOptions} options
-   * @returns {import('@google-cloud/generative-ai').GenerativeModel}
    */
   getModel(options) {
     const {
-      model             = 'gemini-2.0-flash-lite',
+      model             = DEFAULT_MODEL,
       systemInstruction = '',
       temperature       = 0.4,
       maxOutputTokens   = 2048,
@@ -90,30 +91,37 @@ class GeminiClient {
       tools             = [],
     } = options;
 
-    return this._sdk().getGenerativeModel({
+    // Return a plain config — actual calls use _sdk().models.generateContent()
+    return {
+      _sdk:             this._sdk.bind(this),
       model,
-      systemInstruction,
-      safetySettings:  DEFAULT_SAFETY,
-      generationConfig: { temperature, maxOutputTokens, topK, topP },
-      ...(tools.length ? { tools } : {}),
-    });
+      config: {
+        systemInstruction,
+        safetySettings:   DEFAULT_SAFETY,
+        temperature,
+        maxOutputTokens,
+        topK,
+        topP,
+        ...(tools.length ? { tools } : {}),
+      },
+    };
   }
 
   /**
-   * Sends a single prompt and returns the text response.
-   * Uses in-memory cache keyed on cacheKey.
-   * @param {import('@google-cloud/generative-ai').GenerativeModel} model
+   * Sends a single prompt and returns the raw text response.
+   * @param {{ _sdk: Function, model: string, config: object }} modelHandle
    * @param {string} prompt
    * @param {string} [cacheKey]
    * @returns {Promise<string>}
    */
-  async generate(model, prompt, cacheKey) {
+  async generate(modelHandle, prompt, cacheKey) {
     if (cacheKey) {
       const hit = this._cache.get(cacheKey);
       if (hit !== undefined) return hit;
     }
-    const result = await model.generateContent(prompt);
-    const text   = result.response.text();
+    const result = await modelHandle._sdk()
+      .models.generateContent({ model: modelHandle.model, contents: prompt, config: modelHandle.config });
+    const text = result.text;
     if (cacheKey) this._cache.set(cacheKey, text);
     return text;
   }

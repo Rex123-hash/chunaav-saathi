@@ -1,6 +1,6 @@
 'use strict';
 
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 const crypto = require('node:crypto');
 const path = require('path');
 const fs   = require('fs');
@@ -80,15 +80,15 @@ const MCP_TOOLS = [
 // ─── Safety Settings ──────────────────────────────────────────────────────────
 
 const SAFETY_SETTINGS = [
-  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_HARASSMENT,        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+  { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
 ];
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const MODEL_NAME      = 'gemini-2.0-flash-lite';
+const MODEL_NAME      = 'gemini-2.5-flash';
 const MAX_RETRIES     = 3;
 const BASE_DELAY_MS   = 500;
 
@@ -124,24 +124,17 @@ const GENERATION_CONFIG = {
 
 class MythAgent {
   constructor() {
-    this._genAI = null;
-    this._model = null;
+    this._ai = null;
   }
 
   // ── Internal Init ───────────────────────────────────────────────────────────
 
   _ensureClient() {
-    if (this._model) return;
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) throw new Error('[MythAgent] GEMINI_API_KEY environment variable is not set');
-    this._genAI = new GoogleGenerativeAI(apiKey);
-    this._model = this._genAI.getGenerativeModel({
-      model:             MODEL_NAME,
-      systemInstruction: SYSTEM_INSTRUCTION,
-      tools:             MCP_TOOLS,
-      safetySettings:    SAFETY_SETTINGS,
-      generationConfig:  GENERATION_CONFIG,
-    });
+    if (this._ai) return;
+    const project  = process.env.GCLOUD_PROJECT;
+    const location = process.env.GCLOUD_LOCATION || 'us-central1';
+    if (!project) throw new Error('[MythAgent] GCLOUD_PROJECT environment variable is not set');
+    this._ai = new GoogleGenAI({ vertexai: true, project, location });
   }
 
   // ── MCP Tool Handlers ───────────────────────────────────────────────────────
@@ -317,23 +310,34 @@ class MythAgent {
     let lastError;
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
-        // Agentic loop: handle multi-turn function calling
-        const chat    = this._model.startChat();
-        let   result  = await chat.sendMessage(prompt);
-        let   response = result.response;
+        // Agentic loop: handle multi-turn function calling via chat
+        const chat = this._ai.chats.create({
+          model:  MODEL_NAME,
+          config: {
+            systemInstruction: SYSTEM_INSTRUCTION,
+            tools:             MCP_TOOLS,
+            safetySettings:    SAFETY_SETTINGS,
+            ...GENERATION_CONFIG,
+          },
+        });
+
+        let result   = await chat.sendMessage({ message: prompt });
+        let response = result;
 
         // MCP tool loop — Gemini may call tools multiple times
-        while (response.functionCalls()?.length) {
-          const toolResults = await this._dispatchTools(response.functionCalls());
-          result   = await chat.sendMessage(toolResults);
-          response = result.response;
+        while (response.functionCalls?.length) {
+          const toolResults = await this._dispatchTools(response.functionCalls);
+          // Send tool results back as function responses
+          const parts = toolResults.map(t => ({ functionResponse: t.functionResponse }));
+          result   = await chat.sendMessage({ message: parts });
+          response = result;
         }
 
         // Check for safety blocks
         const finishReason = response.candidates?.[0]?.finishReason;
         if (finishReason === 'SAFETY') return this._safetyWarningResponse();
 
-        const text   = response.text();
+        const text   = response.text;
         const parsed = this._parseResponse(text);
 
         if (!parsed) throw new Error(`[MythAgent] Invalid JSON from model: ${text.slice(0, 100)}`);
@@ -367,7 +371,7 @@ class MythAgent {
   /** @returns {{ configured: boolean, model: string }} */
   healthCheck() {
     return {
-      configured: !!process.env.GEMINI_API_KEY,
+      configured: !!process.env.GCLOUD_PROJECT,
       model:      MODEL_NAME,
     };
   }

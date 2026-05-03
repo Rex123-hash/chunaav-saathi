@@ -109,7 +109,7 @@ class ExplainerAgent {
     const key = `${langPref}:${complexity}`;
     if (this._models.has(key)) return this._models.get(key);
     const model = geminiClient.getModel({
-      model:             'gemini-2.0-flash-lite',
+      model:             'gemini-2.5-flash',
       systemInstruction: buildSystemInstruction(langPref, complexity),
       temperature:       0.4,
       maxOutputTokens:   2048,
