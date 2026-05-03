@@ -55,11 +55,21 @@ This platform acts as an always-available, AI-powered civic companion that:
 
 ## 🧠 Approach & Logic
 
-### Problem Statement
-Indian voters — especially first-time voters and those in semi-urban areas — face three key challenges:
-1. **Misinformation** — fabricated claims about EVM tampering, bogus voting, and election fraud
-2. **Complexity** — official Election Commission language is dense and difficult to understand
-3. **Language barrier** — most civic resources are in English only
+### The Problem Statement
+Indian democracy involves nearly a billion voters, but civic education struggles to keep pace. Voters — especially first-time voters and those in semi-urban areas — face three critical challenges:
+1. **The Misinformation Epidemic** — Fabricated claims about EVM tampering, bogus voting, and election fraud spread rapidly on WhatsApp and social media, eroding public trust in democratic institutions.
+2. **The Jargon Barrier** — Official Election Commission documents, legal guidelines (like the Model Code of Conduct), and electoral procedures are written in dense, bureaucratic language that is difficult for the average citizen to parse.
+3. **The Language Divide** — The vast majority of high-quality civic resources and fact-checking tools are available exclusively in English, alienating millions of regional language speakers.
+
+### How We Solved It (Our Approach)
+Chunav Saathi tackles these exact problems using a **Three-Agent AI Architecture** built on Google Gemini 2.5 Flash:
+
+| The Problem | Our Solution | How it works technically |
+|:---|:---|:---|
+| **Misinformation** | **MythAgent** | Uses *MCP (Model Context Protocol)* to hook Gemini directly into a curated database of verified Election Commission facts. It cross-references claims, scores credibility, and provides cited rebuttals (cached in Firestore for instant retrieval). |
+| **Jargon** | **ExplainerAgent** | A dynamic AI explainer that translates complex topics (e.g. VVPAT, NOTA) into 5 adjustable complexity levels (from "Explain Like I'm 5" to "Expert"). |
+| **Language** | **Multilingual AI** | Both agents automatically detect and respond in the user's preferred language, with native support for English, pure Hindi, and conversational Hinglish. |
+| **Voter Apathy** | **JourneyAgent** | Creates a gamified, personalized 5-step civic education journey stored in Firestore, guiding voters from ignorance to complete civic readiness. |
 
 ### Solution Design
 
