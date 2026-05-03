@@ -896,10 +896,54 @@
     </section>
 
     <!-- Footer -->
-    <footer class="text-center text-white/60 text-sm md:text-base fade-in mb-20" role="contentinfo">
-      <p class="mb-2">Built with ❤️ for PromptWars Challenge 2</p>
-      <p class="text-xs md:text-sm">Powered by Gemini 2.0 Flash | Google Cloud | Firestore</p>
-      <p class="text-xs mt-2">Data from Election Commission of India (ECI)</p>
+    <footer class="fade-in mb-20" role="contentinfo">
+      <!-- Google Services Bar -->
+      <div class="glass-card rounded-2xl mx-4 md:mx-auto max-w-5xl p-6 mb-6">
+        <p class="text-center text-white/80 text-xs font-semibold uppercase tracking-widest mb-5">⚡ Powered by Google Technologies</p>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
+          <!-- Vertex AI -->
+          <div class="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+            <span class="text-2xl">🤖</span>
+            <span class="text-white text-xs font-semibold">Vertex AI</span>
+            <span class="text-white/50 text-xs">Gemini 2.5 Flash</span>
+          </div>
+          <!-- Firestore -->
+          <div class="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+            <span class="text-2xl">🔥</span>
+            <span class="text-white text-xs font-semibold">Firestore</span>
+            <span class="text-white/50 text-xs">Real-time DB</span>
+          </div>
+          <!-- Google OAuth -->
+          <div class="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+            <span class="text-2xl">🔑</span>
+            <span class="text-white text-xs font-semibold">Google OAuth2</span>
+            <span class="text-white/50 text-xs">Sign in with Google</span>
+          </div>
+          <!-- Cloud Run -->
+          <div class="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+            <span class="text-2xl">☁️</span>
+            <span class="text-white text-xs font-semibold">Cloud Run</span>
+            <span class="text-white/50 text-xs">Serverless Deploy</span>
+          </div>
+          <!-- Cloud Build -->
+          <div class="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+            <span class="text-2xl">⚙️</span>
+            <span class="text-white text-xs font-semibold">Cloud Build</span>
+            <span class="text-white/50 text-xs">CI/CD Pipeline</span>
+          </div>
+          <!-- ADC -->
+          <div class="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+            <span class="text-2xl">🛡️</span>
+            <span class="text-white text-xs font-semibold">Cloud IAM</span>
+            <span class="text-white/50 text-xs">Keyless Auth (ADC)</span>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom line -->
+      <div class="text-center text-white/50 text-xs space-y-1">
+        <p>Built with ❤️ for <span class="text-white/70 font-semibold">PromptWars Challenge 2 — Election Process Education</span></p>
+        <p>Data sourced from Election Commission of India (ECI) &nbsp;·&nbsp; © 2025 Chunav Saathi</p>
+      </div>
     </footer>
   </main>
 

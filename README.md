@@ -219,14 +219,91 @@ graph TD
 
 ## 🌐 Google Services Integration
 
-| Google Service | How It's Used |
-|:---|:---|
-| **Vertex AI (Gemini 2.5 Flash)** | Powers all three AI agents — myth-checking, explaining, and personalized learning paths |
-| **Google Cloud Firestore** | Stores truth table cache, voter journey state, and myth database with LRU TTL caching |
-| **Google OAuth2 / Google Identity** | Full sign-in with Google flow — profile + email scopes, JWT issuance |
-| **Application Default Credentials** | Secure, keyless authentication to GCP services in production |
-| **Google Cloud Run** | Serverless container deployment target |
-| **Google Cloud Build** | CI/CD build pipeline (`cloudbuild.yaml`) |
+Chunav Saathi is built **entirely on Google's ecosystem** — every layer from AI inference to identity, storage, deployment, and CI/CD runs on Google infrastructure.
+
+---
+
+### 🤖 1. Vertex AI — Gemini 2.5 Flash
+> *The brain of the entire platform.*
+
+All three AI agents are powered by **Google Gemini 2.5 Flash** accessed through **Vertex AI** using the `@google/genai` SDK. This is the most capable, fastest, and most cost-efficient Gemini model available.
+
+- **MythAgent** sends election claims to Gemini with a structured system prompt and receives a fully validated JSON verdict with bilingual explanations, a truth score (0–100), and cited sources.
+- **ExplainerAgent** uses Gemini to convert complex electoral jargon (VVPAT, NOTA, Model Code of Conduct) into plain language at 5 adjustable complexity levels.
+- **VoterJourneyAgent** uses Gemini to generate a personalized next learning module based on a user's completed journey steps.
+- **MCP Tool Calling** — Gemini invokes custom function tools (`searchLocalFacts`, `verifySource`, `searchTruthTable`) mid-conversation before producing its final answer, giving it access to real Indian election data.
+- Authentication uses **Application Default Credentials (ADC)** — no API keys, fully keyless and production-safe.
+
+---
+
+### 🔥 2. Google Cloud Firestore
+> *The memory of the platform.*
+
+**Firestore (Native mode)** is used as both a persistent database and a high-speed cache layer.
+
+- **Truth Table Cache** — Every fact-checked myth is stored in Firestore using a SHA-256 hash key. On repeated queries, results are returned instantly without calling Gemini — saving latency and cost.
+- **Voter Journey Store** — Each user's 5-step civic education progress is tracked in Firestore, persisting across sessions and devices.
+- **Myths Collection** — A curated database of verified election myths is stored and queryable by category (`evm_security`, `voting_process`, `candidate_info`).
+- **LRU In-Memory TTL Cache** — A two-tier caching strategy (in-memory LRU → Firestore) ensures sub-millisecond responses for hot data while maintaining durability.
+
+---
+
+### 🔑 3. Google OAuth2 / Google Identity
+> *Secure, passwordless sign-in.*
+
+The platform integrates **Google Sign-In** using the official `google-auth-library` package, supporting two flows:
+
+- **Web OAuth2 flow** — users are redirected to Google's consent screen, grant permissions, and are redirected back with a verified profile. No passwords are ever stored.
+- **SPA/Mobile ID Token flow** — mobile apps using the Google Sign-In SDK send their `idToken` directly to the server for verification.
+- On successful authentication, the server issues a **signed JWT** (7-day expiry) using `jsonwebtoken`. All protected API endpoints verify this JWT via `requireAuth` middleware.
+- Scopes requested: `userinfo.profile`, `userinfo.email`, `openid` — minimal, privacy-respecting.
+
+---
+
+### ☁️ 4. Google Cloud Run
+> *Zero-config, auto-scaling serverless deployment.*
+
+The application is containerized with a **multi-stage Docker build** and deployed to **Google Cloud Run** in the `asia-south1` (Mumbai) region for lowest latency to Indian users.
+
+- Scales to zero when idle — no cost for unused compute
+- Scales up automatically under load — no infrastructure management
+- HTTPS is provided automatically by Cloud Run
+- The non-root Docker user and read-only container filesystem enforce security best practices
+
+---
+
+### ⚙️ 5. Google Cloud Build
+> *Automated build and deployment pipeline.*
+
+The `cloudbuild.yaml` defines a full **Google Cloud Build** pipeline:
+
+- Builds the Docker image using the multi-stage Dockerfile
+- Pushes to **Google Artifact Registry**
+- Deploys the new image to Cloud Run automatically on every merge to `main`
+
+---
+
+### 🛡️ 6. Cloud IAM & Application Default Credentials (ADC)
+> *Keyless, zero-trust authentication.*
+
+Rather than managing API keys, the application uses **Application Default Credentials (ADC)** throughout — the GCP SDK automatically discovers credentials from the environment (local `gcloud` session or Cloud Run's attached service account). This means:
+
+- **No secrets in code** — ever
+- **No key rotation headaches** — IAM roles grant least-privilege access
+- **Seamless local ↔ production parity** — same auth code works everywhere
+
+---
+
+### Summary
+
+| # | Google Service | Role in Chunav Saathi |
+|:-:|:---|:---|
+| 1 | **Vertex AI — Gemini 2.5 Flash** | All AI inference: myth-busting, explaining, journey personalization, MCP tool calling |
+| 2 | **Google Cloud Firestore** | Truth table cache, voter journey state, myths database, LRU TTL caching |
+| 3 | **Google OAuth2 / Google Identity** | Passwordless sign-in, ID token verification, JWT issuance |
+| 4 | **Google Cloud Run** | Serverless container deployment, auto-scaling, HTTPS |
+| 5 | **Google Cloud Build** | Automated Docker build, Artifact Registry push, Cloud Run deploy |
+| 6 | **Cloud IAM / ADC** | Keyless, least-privilege authentication across all GCP services |
 
 ---
 

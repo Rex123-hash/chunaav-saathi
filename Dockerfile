@@ -25,6 +25,7 @@ COPY --from=deps --chown=nodeapp:nodejs /app/node_modules ./node_modules
 # Copy application source
 COPY --chown=nodeapp:nodejs src/ ./src/
 COPY --chown=nodeapp:nodejs public/ ./public/
+COPY --chown=nodeapp:nodejs data/ ./data/
 COPY --chown=nodeapp:nodejs package.json ./package.json
 
 # Cloud Run standard port
