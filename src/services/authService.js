@@ -17,12 +17,13 @@ const REDIRECT_URI  = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/
 
 // In production, JWT_SECRET MUST be set via environment variable.
 // A weak fallback is only allowed in development/test environments.
-const JWT_SECRET = process.env.JWT_SECRET || (() => {
+function getJwtSecret() {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
   if (process.env.NODE_ENV === 'production') {
     throw new Error('[AuthService] JWT_SECRET environment variable is required in production');
   }
   return 'chunav-saathi-dev-secret-change-in-prod'; // dev only
-})();
+}
 const JWT_EXPIRES   = '7d';
 
 // ─── OAuth2 Client ────────────────────────────────────────────────────────────
@@ -100,7 +101,7 @@ async function verifyIdToken(idToken) {
 function issueToken(user) {
   return jwt.sign(
     { sub: user.googleId, email: user.email, name: user.name, picture: user.picture },
-    JWT_SECRET,
+    getJwtSecret(),
     { expiresIn: JWT_EXPIRES, issuer: 'chunav-saathi' }
   );
 }
@@ -111,7 +112,7 @@ function issueToken(user) {
  * @returns {{ sub:string, email:string, name:string, picture:string }}
  */
 function verifyToken(token) {
-  return jwt.verify(token, JWT_SECRET, { issuer: 'chunav-saathi' });
+  return jwt.verify(token, getJwtSecret(), { issuer: 'chunav-saathi' });
 }
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
