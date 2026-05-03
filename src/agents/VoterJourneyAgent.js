@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file VoterJourneyAgent.js
+ * @description Core module for VoterJourneyAgent functionality.
+ */
+
+
 const geminiClient     = require('../utils/geminiClient');
 const firestoreService = require('../services/firestore');
 

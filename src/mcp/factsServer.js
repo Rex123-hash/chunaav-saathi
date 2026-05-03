@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file factsServer.js
+ * @description Core module for factsServer functionality.
+ */
+
+
 const fs   = require('fs');
 const path = require('path');
 

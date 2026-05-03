@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file firestore.js
+ * @description Core module for firestore functionality.
+ */
+
+
 const { Firestore } = require('@google-cloud/firestore');
 
 // ─── JSDoc Types ──────────────────────────────────────────────────────────────

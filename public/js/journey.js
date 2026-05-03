@@ -1,3 +1,8 @@
+/**
+ * @file journey.js
+ * @description Core module for journey functionality.
+ */
+
 
     /**
      * Voter Journey - 5-Step Wizard

@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file security.js
+ * @description Core module for security functionality.
+ */
+
+
 const helmet    = require('helmet');
 const rateLimit = require('express-rate-limit');
 

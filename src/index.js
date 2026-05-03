@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file index.js
+ * @description Core module for index functionality.
+ */
+
+
 require('dotenv').config({ override: true });
 
 const express    = require('express');

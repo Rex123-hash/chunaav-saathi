@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file auth.js
+ * @description Core module for auth functionality.
+ */
+
+
 const express     = require('express');
 const router      = express.Router();
 const authService = require('../services/authService');

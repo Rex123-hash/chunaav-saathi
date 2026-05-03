@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file MythAgent.js
+ * @description Core module for MythAgent functionality.
+ */
+
+
 const { GoogleGenAI } = require('@google/genai');
 const crypto = require('node:crypto');
 const path = require('path');

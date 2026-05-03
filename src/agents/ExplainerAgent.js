@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file ExplainerAgent.js
+ * @description Core module for ExplainerAgent functionality.
+ */
+
+
 const geminiClient = require('../utils/geminiClient');
 
 // ─── Supported Topics ─────────────────────────────────────────────────────────

@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file geminiClient.js
+ * @description Core module for geminiClient functionality.
+ */
+
+
 const { GoogleGenAI } = require('@google/genai');
 
 // ─── Default Safety Settings ──────────────────────────────────────────────────

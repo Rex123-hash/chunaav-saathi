@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * @file authService.js
+ * @description Core module for authService functionality.
+ */
+
+
 const { OAuth2Client } = require('google-auth-library');
 const jwt              = require('jsonwebtoken');
 
