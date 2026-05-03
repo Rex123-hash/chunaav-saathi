@@ -84,7 +84,15 @@ router.post('/v1/myth-check', aiLimiter, async (req, res) => {
     if (isFirestoreError(err)) {
       return sendError(res, 503, 'Firestore service temporarily unavailable. Retry after 30s.');
     }
-    return sendError(res, 500, 'Failed to process myth check. Please try again.');
+    // Return a structured MythAgentResponse fallback so clients always get a consistent shape
+    return res.status(503).json({
+      isMythBusted:   false,
+      explanation_hi: 'अभी fact-check उपलब्ध नहीं है। कृपया कुछ देर बाद दोबारा try करें।',
+      explanation_en: 'Fact-check is temporarily unavailable. Please try again in a moment.',
+      truthScore:     0,
+      sources:        [],
+      category:       'voting_process',
+    });
   }
 });
 
