@@ -509,29 +509,21 @@ npm run test:integration # terminal 2
 npm run test:ci
 ```
 
-### Test Coverage
+### Test Coverage (68 Total Passing Tests)
 
 | Suite | Tests | Coverage Area |
 |:---|:---:|:---|
 | `mythAgent.test.js` | 17 | MythAgent core, cache, retry, MCP tools, safety, schema validation |
+| `explainerAgent.test.js` | 13 | Explain batching, language fallback, complexity clamping, caching |
+| `authService.test.js` | 13 | JWT issuance/verification, tampered tokens, requireAuth middleware |
+| `factsServer.test.js` | 25 | MCP tools, dispatch routing, schema validation, relevance sorting |
 | `api.test.js` | Integration | HTTP routes, validation, error handling, Firestore integration |
 
-### What's tested in MythAgent (17 tests)
-- ✅ EVM myth correctly identified as false
-- ✅ Bilingual Hindi + English output
-- ✅ Firestore cache hit skips Gemini call
-- ✅ Graceful fallback when Gemini fails
-- ✅ Safety block returns structured warning response
-- ✅ Exponential backoff + retry on rate limits
-- ✅ MCP tool dispatch (searchLocalFacts, verifySource)
-- ✅ Empty/whitespace input rejected
-- ✅ Invalid JSON from model throws after retries
-- ✅ All three myth categories correctly classified
-- ✅ `healthCheck()` reports Vertex AI configuration
-- ✅ Markdown-fenced JSON parsed correctly
-- ✅ Invalid schema returns null
-- ✅ `verifySource()` scores trusted domains (eci.gov.in = 99)
-- ✅ `searchLocalFacts()` keyword matching
+### What's tested across the platform
+- **MythAgent (17 tests):** EVM myths identified, bilingual outputs, Firestore caching, retry logic, MCP tool dispatching.
+- **ExplainerAgent (13 tests):** Complexity clamping (1-5), batch processing, graceful fallbacks on Gemini failure, caching.
+- **AuthService (13 tests):** JWT token issuance/verification, secure middleware handling, expired/tampered tokens rejection.
+- **MCP FactsServer (25 tests):** Synchronous tests for tool declarations, search relevance, strict schema compliance.
 
 ---
 
@@ -583,10 +575,13 @@ chunaav-saathi/
 │       └── geminiClient.js       # Shared Vertex AI client with TTL cache
 ├── tests/
 │   ├── agents/
-│   │   └── mythAgent.test.js     # 17 unit tests (all passing)
+│   │   ├── explainerAgent.test.js# 13 unit tests
+│   │   └── mythAgent.test.js     # 17 unit tests
 │   ├── integration/
 │   │   └── api.test.js           # HTTP integration tests
 │   └── utils/
+│       ├── authService.test.js   # 13 unit tests for JWT + middleware
+│       ├── factsServer.test.js   # 25 unit tests for MCP server
 │       ├── mockData.js           # Canonical test fixtures
 │       └── testHelpers.js        # Server lifecycle + HTTP helpers
 ├── data/
