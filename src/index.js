@@ -168,7 +168,6 @@ app.use((err, req, res, _next) => {
     timestamp: new Date().toISOString(),
   });
 });
-});
 
 // ── Only auto-listen when run directly (not when require()'d in tests) ────────
 if (require.main === module) {

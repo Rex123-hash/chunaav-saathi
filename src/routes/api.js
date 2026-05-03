@@ -17,6 +17,24 @@ const {
   aiLimiter,
   externalApiLimiter,
 }                       = require('../middleware/security');
+const { ValidationError, ExternalServiceError } = require('../utils/AppError');
+
+// ─── Validation Constants ─────────────────────────────────────────────────────
+
+/** @type {Set<string>} */
+const VALID_LANGS      = new Set(['hi', 'en', 'hinglish']);
+/** @type {Set<string>} */
+const VALID_MODULES    = new Set([
+  'voter_registration', 'know_your_candidate', 'voting_day_process',
+  'evm_and_vvpat',      'post_election_rights',
+]);
+/** @type {Set<string>} */
+const VALID_CATEGORIES = new Set(['evm_security', 'voting_process', 'candidate_info']);
+
+// ─── Error Classification ─────────────────────────────────────────────────────
+
+/**
+ * Returns true if the error originates from a Firestore/gRPC outage.
  * Used to return 503 instead of 500.
  * @param {Error} err
  * @returns {boolean}
