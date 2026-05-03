@@ -356,10 +356,17 @@ class MythAgent {
       }
     }
 
-    // All retries exhausted — return cached if available, else throw
+    // All retries exhausted — return cached result if available, else graceful fallback
     console.error('[MythAgent] All retries failed:', lastError?.message);
-    if (cached.found) return cached.fact_check_result;
-    throw new Error(`[MythAgent] Fact-check failed after ${MAX_RETRIES} attempts: ${lastError?.message}`);
+    if (cached.found && cached.fact_check_result) return cached.fact_check_result;
+    return {
+      isMythBusted:   false,
+      explanation_hi: 'अभी fact-check उपलब्ध नहीं है। कृपया कुछ देर बाद दोबारा try करें।',
+      explanation_en: 'Fact-check is temporarily unavailable. Please try again in a moment.',
+      truthScore:     0,
+      sources:        [],
+      category:       'voting_process',
+    };
   }
 
   // ── Health Check ────────────────────────────────────────────────────────────

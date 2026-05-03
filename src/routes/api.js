@@ -99,13 +99,16 @@ router.post('/v1/myth-check', aiLimiter, async (req, res) => {
  * Complexity is clamped (never rejected) — consistent with test contract.
  */
 router.post('/v1/explain', aiLimiter, async (req, res) => {
-  const { topic, complexity, lang = 'en' } = req.body || {};
+  const { topic, complexity, lang = 'hinglish' } = req.body || {};
 
   if (!topic || typeof topic !== 'string' || !topic.trim()) {
     return sendError(res, 400, 'Missing or invalid "topic" field');
   }
   if (topic.trim().length > 500) {
     return sendError(res, 400, '"topic" must be 500 characters or fewer');
+  }
+  if (!VALID_LANGS.has(lang)) {
+    return sendError(res, 400, 'Invalid "lang". Must be "hi", "en", or "hinglish"');
   }
 
   // Clamp complexity (1-5) — test contract requires clamping, not rejection
@@ -129,7 +132,7 @@ router.post('/v1/explain', aiLimiter, async (req, res) => {
  * Returns: ExplanationResult[]
  */
 router.post('/v1/explain/batch', aiLimiter, async (req, res) => {
-  const { topics, complexity, lang = 'en' } = req.body || {};
+  const { topics, complexity, lang = 'hinglish' } = req.body || {};
 
   if (!Array.isArray(topics) || topics.length === 0) {
     return sendError(res, 400, '"topics" must be a non-empty array');
@@ -139,6 +142,9 @@ router.post('/v1/explain/batch', aiLimiter, async (req, res) => {
   }
   if (topics.some(t => typeof t !== 'string' || !t.trim())) {
     return sendError(res, 400, 'All items in "topics" must be non-empty strings');
+  }
+  if (!VALID_LANGS.has(lang)) {
+    return sendError(res, 400, 'Invalid "lang". Must be "hi", "en", or "hinglish"');
   }
 
   const level = Math.min(5, Math.max(1, Math.round(Number(complexity) || 2)));
