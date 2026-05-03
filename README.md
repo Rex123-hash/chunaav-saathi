@@ -19,6 +19,8 @@
 
 ---
 
+![Chunav Saathi Landing Page](docs/assets/hero.png)
+
 ## 📖 Table of Contents
 
 - [Challenge Vertical](#-challenge-vertical)
@@ -157,6 +159,8 @@ User Query → Language Detection → Cache Lookup (Firestore)
 | **🎮 3D EVM Simulator** | Fully interactive Electronic Voting Machine simulation |
 | **🧭 Voter Journey** | AI-personalized 5-step civic education wizard tracked via Firestore |
 | **📰 Verified News Feed** | ECI-sourced election news with myth-busting integration |
+
+![Live Election Dashboard](docs/assets/dashboard.png)
 
 ---
 
