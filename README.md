@@ -19,7 +19,7 @@
 
 ---
 
-![Chunav Saathi Landing Page](docs/assets/hero.png)
+![Chunav Saathi Landing Page](docs/assets/hero.jpg)
 
 ## 📖 Table of Contents
 
@@ -160,7 +160,7 @@ User Query → Language Detection → Cache Lookup (Firestore)
 | **🧭 Voter Journey** | AI-personalized 5-step civic education wizard tracked via Firestore |
 | **📰 Verified News Feed** | ECI-sourced election news with myth-busting integration |
 
-![Live Election Dashboard](docs/assets/dashboard.png)
+![Live Election Dashboard](docs/assets/dashboard.jpg)
 
 ---
 
