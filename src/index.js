@@ -13,6 +13,7 @@ const {
   extraSecurityHeaders,
 } = require('./middleware/security');
 const apiRoutes  = require('./routes/api');
+const authRoutes = require('./routes/auth');
 
 // ─── App Initialisation ───────────────────────────────────────────────────────
 
@@ -121,6 +122,7 @@ app.get('/health', async (req, res) => {
 });
 
 // ── 11. API Routes ────────────────────────────────────────────────────────────
+app.use('/api', authRoutes);
 app.use('/api', apiRoutes);
 
 // ── 12. 404 Catch-All ─────────────────────────────────────────────────────────

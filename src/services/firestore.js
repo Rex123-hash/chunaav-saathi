@@ -111,9 +111,11 @@ class FirestoreService {
         // Explicit service account key (local staging)
         console.log('[Firestore] Using GOOGLE_APPLICATION_CREDENTIALS');
         settings.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+        if (process.env.GCLOUD_PROJECT) settings.projectId = process.env.GCLOUD_PROJECT;
       } else {
-        // Cloud Run / GCE — Application Default Credentials
+        // Cloud Run / ADC — always pass projectId if provided
         console.log('[Firestore] Using Application Default Credentials');
+        if (process.env.GCLOUD_PROJECT) settings.projectId = process.env.GCLOUD_PROJECT;
       }
 
       this._db = new Firestore(settings);
