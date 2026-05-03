@@ -96,22 +96,27 @@ function searchFacts(query) {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   if (!terms.length) return { facts: [], count: 0, query };
 
-  const facts = FACTS.filter(f => {
-    const haystack = [
-      f.fact, f.fact_hi, ...f.keywords, f.category,
-    ].join(' ').toLowerCase();
-    return terms.some(t => haystack.includes(t));
-  });
+  function score(f) {
+    let s = 0;
+    const kwHaystack  = f.keywords.join(' ').toLowerCase();
+    const enHaystack  = f.fact.toLowerCase();
+    const hiHaystack  = f.fact_hi.toLowerCase();
+    const catHaystack = f.category.toLowerCase();
+    for (const t of terms) {
+      if (kwHaystack.includes(t))  s += 3;
+      if (enHaystack.includes(t))  s += 2;
+      if (hiHaystack.includes(t))  s += 1;
+      if (catHaystack.includes(t)) s += 1;
+    }
+    return s;
+  }
 
-  // Sort by relevance: count of matched terms descending
-  facts.sort((a, b) => {
-    const scoreOf = (f) => {
-      const h = [f.fact, f.fact_hi, ...f.keywords].join(' ').toLowerCase();
-      return terms.reduce((n, t) => n + (h.includes(t) ? 1 : 0), 0);
-    };
-    return scoreOf(b) - scoreOf(a);
-  });
+  const scored = FACTS
+    .map(f => ({ f, s: score(f) }))
+    .filter(({ s }) => s > 0)
+    .sort((a, b) => b.s - a.s);
 
+  const facts = scored.map(({ f }) => f);
   return { facts, count: facts.length, query };
 }
 

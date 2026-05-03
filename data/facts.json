@@ -1,74 +1,884 @@
 {
-  "version": "1.0.0",
-  "last_updated": "2024-01-01",
+  "version": "2.0.0",
+  "last_updated": "2024-05-03",
   "facts": [
     {
       "id": "evm_001",
       "category": "evm_security",
-      "keywords": ["evm", "hack", "tamper", "manipulate", "rigged"],
+      "keywords": [
+        "evm",
+        "hack",
+        "tamper",
+        "manipulate",
+        "rigged"
+      ],
       "fact_en": "EVMs in India are standalone devices with no Wi-Fi, Bluetooth, or internet connectivity. They cannot be remotely hacked.",
       "fact_hi": "भारत की EVM मशीनें standalone होती हैं - कोई Wi-Fi, Bluetooth या internet नहीं होता। इन्हें remotely hack नहीं किया जा सकता।",
       "credibility": 98,
       "sources": [
-        { "title": "Election Commission of India - EVM FAQ", "url": "https://ecisveep.nic.in/evm", "credibility": 99 },
-        { "title": "Supreme Court judgment on EVM", "url": "https://main.sci.gov.in", "credibility": 99 }
+        {
+          "title": "Election Commission of India - EVM FAQ",
+          "url": "https://ecisveep.nic.in/evm",
+          "credibility": 99
+        },
+        {
+          "title": "Supreme Court judgment on EVM",
+          "url": "https://main.sci.gov.in",
+          "credibility": 99
+        }
       ]
     },
     {
       "id": "vote_001",
       "category": "voting_process",
-      "keywords": ["bogus", "fake", "duplicate", "vote twice", "multiple votes"],
+      "keywords": [
+        "bogus",
+        "fake",
+        "duplicate",
+        "vote twice",
+        "multiple votes"
+      ],
       "fact_en": "Each voter can vote only once. The indelible ink mark and EPIC card verification prevent duplicate voting.",
       "fact_hi": "हर voter सिर्फ एक बार vote कर सकता है। indelible ink और EPIC card verification से duplicate voting नहीं हो सकती।",
       "credibility": 97,
       "sources": [
-        { "title": "Representation of the People Act, 1951", "url": "https://legislative.gov.in", "credibility": 99 }
+        {
+          "title": "Representation of the People Act, 1951",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
       ]
     },
     {
       "id": "vote_002",
       "category": "voting_process",
-      "keywords": ["nota", "none of the above", "reject", "no candidate"],
+      "keywords": [
+        "nota",
+        "none of the above",
+        "reject",
+        "no candidate"
+      ],
       "fact_en": "NOTA (None Of The Above) is a valid voting option introduced by the Supreme Court in 2013.",
       "fact_hi": "NOTA (None Of The Above) एक valid voting option है, जिसे Supreme Court ने 2013 में introduce किया था।",
       "credibility": 99,
       "sources": [
-        { "title": "Supreme Court NOTA Judgment 2013", "url": "https://main.sci.gov.in", "credibility": 99 }
+        {
+          "title": "Supreme Court NOTA Judgment 2013",
+          "url": "https://main.sci.gov.in",
+          "credibility": 99
+        }
       ]
     },
     {
       "id": "candidate_001",
       "category": "candidate_info",
-      "keywords": ["criminal", "case", "charge", "affidavit", "background"],
+      "keywords": [
+        "criminal",
+        "case",
+        "charge",
+        "affidavit",
+        "background"
+      ],
       "fact_en": "Candidates must declare criminal cases in their affidavit filed with the Election Commission. This is public information.",
       "fact_hi": "Candidates को Election Commission में file किए गए affidavit में criminal cases declare करने होते हैं। यह public information है।",
       "credibility": 98,
       "sources": [
-        { "title": "ECI Affidavit Portal", "url": "https://affidavit.eci.gov.in", "credibility": 99 },
-        { "title": "ADR India", "url": "https://adrindia.org", "credibility": 92 }
+        {
+          "title": "ECI Affidavit Portal",
+          "url": "https://affidavit.eci.gov.in",
+          "credibility": 99
+        },
+        {
+          "title": "ADR India",
+          "url": "https://adrindia.org",
+          "credibility": 92
+        }
       ]
     },
     {
       "id": "vote_003",
       "category": "voting_process",
-      "keywords": ["vvpat", "paper", "trail", "verify", "slip"],
+      "keywords": [
+        "vvpat",
+        "paper",
+        "trail",
+        "verify",
+        "slip"
+      ],
       "fact_en": "VVPAT machines print a paper slip showing your vote after you press the EVM button. This slip is visible for 7 seconds.",
       "fact_hi": "VVPAT machine EVM button press करने के बाद एक paper slip print करती है। यह slip 7 seconds तक visible रहती है।",
       "credibility": 99,
       "sources": [
-        { "title": "Election Commission VVPAT Guide", "url": "https://ecisveep.nic.in/vvpat", "credibility": 99 }
+        {
+          "title": "Election Commission VVPAT Guide",
+          "url": "https://ecisveep.nic.in/vvpat",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_002",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "memory",
+        "battery",
+        "stored",
+        "power",
+        "remove"
+      ],
+      "fact_en": "EVM results are stored in non-volatile memory. Removing the battery does not erase votes.",
+      "fact_hi": "EVM results non-volatile memory mein store hote hain. Battery nikalane se votes erase nahin hote.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Technical Specs",
+          "url": "https://ecisveep.nic.in/evm",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_003",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "seal",
+        "tamper",
+        "proof",
+        "candidate",
+        "agent"
+      ],
+      "fact_en": "EVMs are sealed with tamper-proof seals checked by candidates before voting begins.",
+      "fact_hi": "EVM ko tamper-proof seals se seal kiya jata hai jo candidates voting se pehle verify karte hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Sealing Procedure",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_004",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "mock",
+        "poll",
+        "test",
+        "pre-election",
+        "accuracy"
+      ],
+      "fact_en": "A mandatory mock poll is conducted before every election in presence of candidates to verify EVM accuracy.",
+      "fact_hi": "Har election se pehle candidates ki upasthiti mein mandatory mock poll hota hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Mock Poll Guidelines",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_005",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "random",
+        "allocation",
+        "constituency",
+        "booth",
+        "double"
+      ],
+      "fact_en": "EVMs are randomly allocated to polling booths via double-randomization to prevent targeting.",
+      "fact_hi": "EVMs ko double-randomization ke zariye polling booths mein randomly allocate kiya jata hai.",
+      "credibility": 97,
+      "sources": [
+        {
+          "title": "ECI EVM Randomization",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_007",
+      "category": "evm_security",
+      "keywords": [
+        "vvpat",
+        "count",
+        "5 booths",
+        "sc order",
+        "verification",
+        "dispute"
+      ],
+      "fact_en": "Supreme Court ordered VVPAT slips from 5 randomly selected booths per constituency to be cross-checked.",
+      "fact_hi": "Supreme Court ke order par har constituency mein 5 random booths ki VVPAT slips count ki jati hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "SC VVPAT Order 2019",
+          "url": "https://main.sci.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_008",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "signal",
+        "jam",
+        "radio",
+        "frequency",
+        "remote"
+      ],
+      "fact_en": "EVMs have no radio frequency components. Signal jammers have no effect on them.",
+      "fact_hi": "EVMs mein koi radio frequency component nahin hai. Signal jammers ka koi asar nahin hota.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Technical FAQ",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_009",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "manufacturer",
+        "bel",
+        "ecil",
+        "government",
+        "foreign"
+      ],
+      "fact_en": "EVMs are manufactured only by BEL and ECIL, two government undertakings. No critical foreign components are used.",
+      "fact_hi": "EVM sirf do sarkari kampaniyon BEL aur ECIL dwara banayi jati hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI on EVM Manufacturers",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_010",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "strongroom",
+        "storage",
+        "security",
+        "cctv",
+        "central forces"
+      ],
+      "fact_en": "After voting, EVMs are stored in sealed strongrooms with 3-tier security, CCTV, and central forces.",
+      "fact_hi": "Voting ke baad EVMs sealed strongrooms mein rakhi jati hain jahan CCTV aur central forces hoti hain.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Storage Protocol",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_011",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "anonymous",
+        "who voted",
+        "record",
+        "privacy",
+        "secret ballot"
+      ],
+      "fact_en": "EVMs do not record which voter pressed which button. Votes are completely anonymous.",
+      "fact_hi": "EVM record nahin karti ki kis voter ne kaunsa button press kiya. Votes puri tarah anonymous hote hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI EVM Privacy FAQ",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "evm_012",
+      "category": "evm_security",
+      "keywords": [
+        "evm",
+        "challenge",
+        "hackathon",
+        "demonstrate",
+        "tamper",
+        "proof"
+      ],
+      "fact_en": "ECI has repeatedly invited public EVM hackathons. No one has successfully demonstrated tampering under controlled conditions.",
+      "fact_hi": "ECI ne baar-baar public EVM hackathons invite kiye. Controlled conditions mein koi tampering demonstrate nahin kar paya.",
+      "credibility": 96,
+      "sources": [
+        {
+          "title": "ECI EVM Challenge",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_004",
+      "category": "voting_process",
+      "keywords": [
+        "register",
+        "voter",
+        "nvsp",
+        "form 6",
+        "enroll",
+        "online",
+        "free"
+      ],
+      "fact_en": "Citizens aged 18+ can register as voters online at voters.eci.gov.in using Form 6. Registration is free.",
+      "fact_hi": "18+ naagarik voters.eci.gov.in par Form 6 se free mein voter registration kar sakte hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Voter Registration Portal",
+          "url": "https://voters.eci.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_005",
+      "category": "voting_process",
+      "keywords": [
+        "polling booth",
+        "wrong",
+        "location",
+        "address",
+        "assigned"
+      ],
+      "fact_en": "You must vote only at the polling booth listed on your voter slip. Voting at wrong booth is not permitted.",
+      "fact_hi": "Aapko sirf voter slip par listed booth par vote karna hota hai. Galat booth par vote allowed nahin.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Polling Guidelines",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_006",
+      "category": "voting_process",
+      "keywords": [
+        "proxy",
+        "vote",
+        "behalf",
+        "family",
+        "representative"
+      ],
+      "fact_en": "Proxy voting is not permitted in India except for overseas service voters. Each person must vote personally.",
+      "fact_hi": "India mein proxy voting allowed nahin hai. Har vyakti ko personally vote karna hota hai.",
+      "credibility": 97,
+      "sources": [
+        {
+          "title": "Representation of the People Act",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_007",
+      "category": "voting_process",
+      "keywords": [
+        "holiday",
+        "election day",
+        "paid leave",
+        "employer",
+        "office"
+      ],
+      "fact_en": "Election Day is a paid holiday. Employers must grant paid leave to all employees to vote.",
+      "fact_hi": "Election Day ek paid holiday hai. Employers ko employees ko vote ke liye paid leave deni hoti hai.",
+      "credibility": 97,
+      "sources": [
+        {
+          "title": "Negotiable Instruments Act",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_008",
+      "category": "voting_process",
+      "keywords": [
+        "complaint",
+        "helpline",
+        "1950",
+        "misbehavior",
+        "booth",
+        "report"
+      ],
+      "fact_en": "Voters can call Voter Helpline 1950 to report any misbehavior at polling booths or election irregularities.",
+      "fact_hi": "Voters Voter Helpline 1950 par call karke kisi bhi irregularity ki report kar sakte hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Voter Helpline",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_009",
+      "category": "voting_process",
+      "keywords": [
+        "bribe",
+        "money",
+        "gift",
+        "vote",
+        "buy",
+        "illegal",
+        "ipc",
+        "171b"
+      ],
+      "fact_en": "Accepting bribes to vote for a candidate is illegal under IPC Section 171B, punishable with 1 year imprisonment.",
+      "fact_hi": "Vote ke badle rishwat lena IPC Section 171B ke tahat illegal hai. 1 saal ki jail ho sakti hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "IPC Section 171B",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_010",
+      "category": "voting_process",
+      "keywords": [
+        "transfer",
+        "address",
+        "move",
+        "form 8a",
+        "delete",
+        "update"
+      ],
+      "fact_en": "If you move to a new address, update registration using Form 8A so your name is not deleted from voter roll.",
+      "fact_hi": "Nayi jagah shift hone par Form 8A se registration update karein taaki aapka naam roll se na hate.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Form 8A",
+          "url": "https://voters.eci.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_011",
+      "category": "voting_process",
+      "keywords": [
+        "booth capturing",
+        "force",
+        "intimidate",
+        "violence",
+        "criminal",
+        "offense"
+      ],
+      "fact_en": "Booth capturing is a criminal offense under Section 135A of Representation of People Act, punishable with 1-3 years.",
+      "fact_hi": "Booth capturing Section 135A ke tahat criminal offense hai jisme 1-3 saal ki jail hoti hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "Representation of the People Act",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_012",
+      "category": "voting_process",
+      "keywords": [
+        "model code",
+        "mcc",
+        "conduct",
+        "election",
+        "announced",
+        "result"
+      ],
+      "fact_en": "Model Code of Conduct comes into force when elections are announced and remains till results are declared.",
+      "fact_hi": "Model Code of Conduct elections announce hone se result declare hone tak lagu rehta hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Model Code of Conduct",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_013",
+      "category": "voting_process",
+      "keywords": [
+        "exit poll",
+        "ban",
+        "telecast",
+        "last phase",
+        "result",
+        "survey"
+      ],
+      "fact_en": "Exit polls cannot be telecast until the last phase of voting ends. Violation is punishable by law.",
+      "fact_hi": "Last phase ki voting khatam hone tak exit polls telecast nahin ho sakte.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Exit Poll Rules",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_014",
+      "category": "voting_process",
+      "keywords": [
+        "silence",
+        "campaign",
+        "48 hours",
+        "ban",
+        "procession",
+        "meeting"
+      ],
+      "fact_en": "Campaigning must stop 48 hours before polling day. No public meetings or processions are allowed in this period.",
+      "fact_hi": "Polling day se 48 ghante pehle campaigning band honi chahiye. Koi public meeting ya procession allowed nahin.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "Representation of the People Act Section 126",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_015",
+      "category": "voting_process",
+      "keywords": [
+        "postal ballot",
+        "army",
+        "service voter",
+        "elderly",
+        "85",
+        "absentee"
+      ],
+      "fact_en": "Armed forces, officials posted elsewhere and senior citizens aged 85+ can use postal ballot facility.",
+      "fact_hi": "Armed forces, bahar posted officials aur 85+ umra ke senior citizens postal ballot use kar sakte hain.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Postal Ballot Rules",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "vote_016",
+      "category": "voting_process",
+      "keywords": [
+        "disabled",
+        "wheelchair",
+        "elderly",
+        "assistance",
+        "priority",
+        "special"
+      ],
+      "fact_en": "Disabled and elderly voters are entitled to priority entry at polling booths and assistance from an escort.",
+      "fact_hi": "Disabled aur elderly voters ko polling booth par priority entry milti hai aur woh sahayak ki madad le sakte hain.",
+      "credibility": 98,
+      "sources": [
+        {
+          "title": "ECI Accessibility Guidelines",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_002",
+      "category": "candidate_info",
+      "keywords": [
+        "assets",
+        "property",
+        "declaration",
+        "wealth",
+        "income",
+        "affidavit"
+      ],
+      "fact_en": "Every candidate must declare their assets, liabilities and income in the ECI affidavit.",
+      "fact_hi": "Har candidate ko ECI affidavit mein assets, liabilities aur income declare karni hoti hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI Affidavit Guidelines",
+          "url": "https://affidavit.eci.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_003",
+      "category": "candidate_info",
+      "keywords": [
+        "age",
+        "minimum",
+        "25",
+        "lok sabha",
+        "assembly",
+        "contest"
+      ],
+      "fact_en": "The minimum age to contest Lok Sabha or State Assembly elections is 25 years.",
+      "fact_hi": "Lok Sabha ya State Assembly elections mein contest karne ki minimum age 25 saal hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "Representation of the People Act 1951",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_004",
+      "category": "candidate_info",
+      "keywords": [
+        "nomination",
+        "deposit",
+        "security",
+        "25000",
+        "sc st",
+        "12500"
+      ],
+      "fact_en": "Lok Sabha candidates must deposit Rs.25,000 (Rs.12,500 for SC/ST) as security deposit with nomination.",
+      "fact_hi": "Lok Sabha candidates ko nomination ke saath Rs.25,000 (SC/ST ke liye Rs.12,500) security deposit deni hoti hai.",
+      "credibility": 97,
+      "sources": [
+        {
+          "title": "ECI Nomination Guidelines",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_005",
+      "category": "candidate_info",
+      "keywords": [
+        "spending",
+        "limit",
+        "campaign",
+        "expense",
+        "95 lakh",
+        "election"
+      ],
+      "fact_en": "Lok Sabha candidates have a campaign spending limit of Rs.95 lakh per constituency in most states.",
+      "fact_hi": "Lok Sabha candidates ke liye campaign spending limit adhikansh states mein Rs.95 lakh per constituency hai.",
+      "credibility": 97,
+      "sources": [
+        {
+          "title": "ECI Election Expenditure Rules",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_006",
+      "category": "candidate_info",
+      "keywords": [
+        "disqualify",
+        "convict",
+        "sentence",
+        "2 years",
+        "contest",
+        "ban"
+      ],
+      "fact_en": "A person convicted with 2+ year sentence is disqualified from contesting elections for 6 years after release.",
+      "fact_hi": "2+ saal ki saza pane wala vyakti rihaee ke baad 6 saal tak elections contest karne ke liye disqualified hota hai.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "Representation of the People Act Section 8",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_007",
+      "category": "candidate_info",
+      "keywords": [
+        "know candidate",
+        "app",
+        "check",
+        "criminal",
+        "education",
+        "voter helpline"
+      ],
+      "fact_en": "Citizens can check any candidate criminal record, assets and education on the Voter Helpline App or ECI portal.",
+      "fact_hi": "Citizens Voter Helpline App ya ECI portal par kisi bhi candidate ka record dekh sakte hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "ECI KnowYourCandidate",
+          "url": "https://affidavit.eci.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_008",
+      "category": "candidate_info",
+      "keywords": [
+        "rajya sabha",
+        "upper house",
+        "indirect",
+        "state legislature",
+        "mla"
+      ],
+      "fact_en": "Rajya Sabha members are elected by State Legislative Assembly members, not directly by citizens.",
+      "fact_hi": "Rajya Sabha ke members seedhe janta dwara nahin balki State Legislative Assembly members dwara elect kiye jaate hain.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "Constitution of India Article 80",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_009",
+      "category": "candidate_info",
+      "keywords": [
+        "mp",
+        "mla",
+        "term",
+        "5 year",
+        "lok sabha",
+        "dissolved"
+      ],
+      "fact_en": "Lok Sabha MPs serve a 5-year term unless the house is dissolved earlier. MLAs also serve 5-year terms.",
+      "fact_hi": "Lok Sabha MPs 5 saal ke liye serve karte hain jab tak house pehle dissolve na ho.",
+      "credibility": 99,
+      "sources": [
+        {
+          "title": "Constitution of India",
+          "url": "https://legislative.gov.in",
+          "credibility": 99
+        }
+      ]
+    },
+    {
+      "id": "candidate_010",
+      "category": "candidate_info",
+      "keywords": [
+        "independent",
+        "symbol",
+        "allotment",
+        "party",
+        "ballot"
+      ],
+      "fact_en": "Independent candidates are allotted symbols from the ECI-approved list. They cannot use a recognized party symbol.",
+      "fact_hi": "Independent candidates ko ECI-approved list se symbols allot kiye jaate hain. Woh party symbol use nahin kar sakte.",
+      "credibility": 97,
+      "sources": [
+        {
+          "title": "ECI Symbol Order 1968",
+          "url": "https://ecisveep.nic.in",
+          "credibility": 99
+        }
       ]
     }
   ],
   "trusted_domains": [
-    { "domain": "ecisveep.nic.in", "credibility": 99, "name": "Election Commission of India" },
-    { "domain": "eci.gov.in", "credibility": 99, "name": "Election Commission of India" },
-    { "domain": "main.sci.gov.in", "credibility": 99, "name": "Supreme Court of India" },
-    { "domain": "legislative.gov.in", "credibility": 99, "name": "India Code - Ministry of Law" },
-    { "domain": "pib.gov.in", "credibility": 95, "name": "Press Information Bureau" },
-    { "domain": "adrindia.org", "credibility": 92, "name": "Association for Democratic Reforms" },
-    { "domain": "factchecker.in", "credibility": 90, "name": "FactChecker.in" },
-    { "domain": "boomlive.in", "credibility": 88, "name": "BOOM Live" },
-    { "domain": "altnews.in", "credibility": 88, "name": "AltNews" }
+    {
+      "domain": "ecisveep.nic.in",
+      "credibility": 99,
+      "name": "Election Commission of India"
+    },
+    {
+      "domain": "eci.gov.in",
+      "credibility": 99,
+      "name": "Election Commission of India"
+    },
+    {
+      "domain": "main.sci.gov.in",
+      "credibility": 99,
+      "name": "Supreme Court of India"
+    },
+    {
+      "domain": "legislative.gov.in",
+      "credibility": 99,
+      "name": "India Code - Ministry of Law"
+    },
+    {
+      "domain": "pib.gov.in",
+      "credibility": 95,
+      "name": "Press Information Bureau"
+    },
+    {
+      "domain": "adrindia.org",
+      "credibility": 92,
+      "name": "Association for Democratic Reforms"
+    },
+    {
+      "domain": "factchecker.in",
+      "credibility": 90,
+      "name": "FactChecker.in"
+    },
+    {
+      "domain": "boomlive.in",
+      "credibility": 88,
+      "name": "BOOM Live"
+    },
+    {
+      "domain": "altnews.in",
+      "credibility": 88,
+      "name": "AltNews"
+    },
+    {
+      "domain": "voters.eci.gov.in",
+      "credibility": 99,
+      "name": "ECI Voter Registration Portal"
+    },
+    {
+      "domain": "affidavit.eci.gov.in",
+      "credibility": 99,
+      "name": "ECI Candidate Affidavit Portal"
+    },
+    {
+      "domain": "thequint.com",
+      "credibility": 82,
+      "name": "The Quint Fact Check"
+    }
   ]
 }

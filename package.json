@@ -31,7 +31,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/chunav-saathi"
+    "url": "https://github.com/Rex123-hash/chunav-saathi"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -41,16 +41,15 @@
     "@google-cloud/secret-manager": "^5.0.0",
     "@google-cloud/vertexai": "^1.12.0",
     "@google/genai": "^1.51.0",
-    "@google/generative-ai": "^0.24.0",
+    "@google/generative-ai": "^0.24.1",
     "compression": "^1.8.1",
-    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^4.18.0",
     "express-rate-limit": "^8.4.1",
-    "express-validator": "^7.3.2",
     "google-auth-library": "^10.6.2",
     "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "xss": "^1.0.15"
   },
   "author": "",
   "license": "MIT"

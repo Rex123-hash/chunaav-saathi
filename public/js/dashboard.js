@@ -135,14 +135,35 @@
       const dashObs = new IntersectionObserver((entries) => {
         if (!entries[0].isIntersecting) return;
         dashObs.disconnect();
-        animateCount(document.getElementById('ctr-turnout'), MOCK.turnout, '%', 1);
-        animateCount(document.getElementById('ctr-votes'), MOCK.votes, '');
-        animateCount(document.getElementById('ctr-stations'), MOCK.stations, '');
-        animateCount(document.getElementById('ctr-states'), MOCK.statesCount, '');
-        setTimeout(() => {
+
+        // Establish SSE Connection for Live Data
+        const evtSource = new EventSource('/api/v1/live-stats');
+        
+        evtSource.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          document.getElementById('ctr-turnout').textContent = data.turnout + '%';
+          document.getElementById('ctr-votes').textContent = data.votesCast.toLocaleString('en-IN');
+          document.getElementById('ctr-stations').textContent = data.activeStations.toLocaleString('en-IN');
+          document.getElementById('ctr-states').textContent = data.statesVoting;
+          
           const bar = document.getElementById('bar-turnout');
-          if (bar) bar.style.width = MOCK.turnout + '%';
-        }, 200);
+          if (bar) bar.style.width = data.turnout + '%';
+        };
+
+        evtSource.onerror = (err) => {
+          console.error('[SSE] Connection lost, falling back to mock.', err);
+          evtSource.close();
+          // Fallback if SSE fails
+          animateCount(document.getElementById('ctr-turnout'), MOCK.turnout, '%', 1);
+          animateCount(document.getElementById('ctr-votes'), MOCK.votes, '');
+          animateCount(document.getElementById('ctr-stations'), MOCK.stations, '');
+          animateCount(document.getElementById('ctr-states'), MOCK.statesCount, '');
+          setTimeout(() => {
+            const bar = document.getElementById('bar-turnout');
+            if (bar) bar.style.width = MOCK.turnout + '%';
+          }, 200);
+        };
+
         initCharts();
       }, { threshold: 0.2 });
       const sec = document.getElementById('s-dashboard');

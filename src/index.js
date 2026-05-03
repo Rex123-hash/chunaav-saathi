@@ -8,6 +8,7 @@
 
 require('dotenv').config({ override: true });
 
+const crypto     = require('node:crypto');
 const express    = require('express');
 const path       = require('path');
 const compression = require('compression');
@@ -143,6 +144,15 @@ app.use((req, res) => {
 // ── 13. Global Error Handler ─────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, _next) => {
+  if (err.isOperational) {
+    return res.status(err.statusCode).json({
+      error: err.message,
+      code: err.code,
+      requestId: req.requestId,
+      timestamp: new Date().toISOString()
+    });
+  }
+  
   // Never expose stack traces or internal details in production
   const isProduction = process.env.NODE_ENV === 'production';
   const status  = err.status || err.statusCode || 500;
@@ -150,13 +160,14 @@ app.use((err, req, res, _next) => {
     ? 'Internal server error'
     : (err.message || 'Internal server error');
 
-  console.error(`[ERROR] ${req.method} ${req.path} → ${status}: ${err.stack || err.message} [${req.requestId}]`);
+  console.error(`[ERROR] ${req.method} ${req.path} ? ${status}: ${err.stack || err.message} [${req.requestId}]`);
 
   res.status(status).json({
     error:     message,
     requestId: req.requestId,
     timestamp: new Date().toISOString(),
   });
+});
 });
 
 // ── Only auto-listen when run directly (not when require()'d in tests) ────────

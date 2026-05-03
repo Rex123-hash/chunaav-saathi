@@ -7,6 +7,7 @@
 
 
 const { GoogleGenAI } = require('@google/genai');
+const { TTLCache }    = require('./cache');
 
 // ─── Default Safety Settings ──────────────────────────────────────────────────
 
@@ -16,40 +17,6 @@ const DEFAULT_SAFETY = [
   { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
   { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
 ];
-
-// ─── LRU Cache (shared across agents) ────────────────────────────────────────
-
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
-const CACHE_MAX    = 100;
-
-class TTLCache {
-  constructor(max = CACHE_MAX) {
-    /** @type {Map<string, {value:any, expires:number}>} */
-    this._store = new Map();
-    this._max   = max;
-  }
-  get(key) {
-    const e = this._store.get(key);
-    if (!e) return undefined;
-    if (Date.now() > e.expires) { this._store.delete(key); return undefined; }
-    this._store.delete(key);
-    this._store.set(key, e); // LRU refresh
-    return e.value;
-  }
-  set(key, value) {
-    if (this._store.has(key)) this._store.delete(key);
-    else if (this._store.size >= this._max)
-      this._store.delete(this._store.keys().next().value);
-    this._store.set(key, { value, expires: Date.now() + CACHE_TTL_MS });
-  }
-  delete(key) { this._store.delete(key); }
-
-  clearByPrefix(prefix) {
-    for (const key of this._store.keys()) {
-      if (key.startsWith(prefix)) this._store.delete(key);
-    }
-  }
-}
 
 // ─── GeminiClient ─────────────────────────────────────────────────────────────
 
@@ -144,6 +111,21 @@ class GeminiClient {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Generates a text embedding for the given input string using text-embedding-004.
+   * @param {string} text 
+   * @returns {Promise<number[]>}
+   */
+  async embed(text) {
+    const ai = this._sdk();
+    const result = await ai.models.embedContent({
+      model: 'text-embedding-004',
+      contents: text
+    });
+    // For Vertex AI / GenAI SDK, embeddings[0].values contains the vector
+    return result.embeddings[0].values;
   }
 
   /** Expose shared cache so agents can write their own entries. */

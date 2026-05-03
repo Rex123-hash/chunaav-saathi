@@ -7,6 +7,7 @@
 
 
 const { Firestore } = require('@google-cloud/firestore');
+const { TTLCache }  = require('../utils/cache');
 
 // ─── JSDoc Types ──────────────────────────────────────────────────────────────
 
@@ -37,47 +38,6 @@ const { Firestore } = require('@google-cloud/firestore');
  * @property {"gemini-2.0-flash-lite"|"manual_review"} verified_by
  * @property {FirebaseFirestore.Timestamp} last_updated
  */
-
-// ─── LRU Cache (Map-based, max 100 items, 5-min TTL) ─────────────────────────
-
-const CACHE_TTL_MS  = 5 * 60 * 1000; // 5 minutes
-const CACHE_MAX     = 100;
-
-class TTLCache {
-  constructor(max = CACHE_MAX) {
-    /** @type {Map<string, {value: any, expires: number}>} */
-    this._store = new Map();
-    this._max   = max;
-  }
-
-  get(key) {
-    const entry = this._store.get(key);
-    if (!entry) return undefined;
-    if (Date.now() > entry.expires) { this._store.delete(key); return undefined; }
-    // LRU: re-insert to move to end
-    this._store.delete(key);
-    this._store.set(key, entry);
-    return entry.value;
-  }
-
-  set(key, value) {
-    if (this._store.has(key)) this._store.delete(key); // refresh position
-    else if (this._store.size >= this._max) {
-      // Evict oldest (first) entry
-      this._store.delete(this._store.keys().next().value);
-    }
-    this._store.set(key, { value, expires: Date.now() + CACHE_TTL_MS });
-  }
-
-  delete(key) { this._store.delete(key); }
-  clear()     { this._store.clear(); }
-
-  clearByPrefix(prefix) {
-    for (const key of this._store.keys()) {
-      if (key.startsWith(prefix)) this._store.delete(key);
-    }
-  }
-}
 
 // ─── Collections ─────────────────────────────────────────────────────────────
 
@@ -263,6 +223,27 @@ class FirestoreService {
     }
   }
 
+  /**
+   * Fetches recent truth table entries for in-memory vector search.
+   * Limits to 1000 to prevent memory exhaustion in a hackathon context.
+   * @returns {Promise<TruthTableEntry[]>}
+   */
+  async getAllTruthTableEntries() {
+    const cacheKey = 'truth_table_all';
+    const cached = this._cache.get(cacheKey);
+    if (cached) return cached;
+    try {
+      const db = await this._client();
+      const snap = await db.collection(COLLECTIONS.TRUTH_TABLE).orderBy('last_updated', 'desc').limit(1000).get();
+      const entries = snap.docs.map(d => ({ ...d.data() }));
+      this._cache.set(cacheKey, entries);
+      return entries;
+    } catch (err) {
+      console.error('[Firestore] getAllTruthTableEntries error:', err.message);
+      return [];
+    }
+  }
+
   /** @param {string} mythId @param {Omit<TruthTableEntry,'myth_id'|'last_updated'>} result */
   async updateTruthTable(mythId, result) {
     try {
@@ -272,6 +253,7 @@ class FirestoreService {
         { merge: true }
       );
       this._cache.delete(`truth:${mythId}`);
+      this._cache.delete('truth_table_all');
     } catch (err) {
       console.error('[Firestore] updateTruthTable error:', err.message);
       throw new Error(`Failed to update truth table for myth ${mythId}: ${err.message}`);
